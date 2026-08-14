@@ -144,7 +144,15 @@ struct Resources {
 		audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
 		musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
 
-		map = tmx::loadMap("data/maps/largemap.tmx");
+		map = tmx::loadMap("data/maps/smallmap.tmx");
+		if (!map)
+		{
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
+			return;
+		}
+		// Verify map properties
+		SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
+			map->mapWidth, map->mapHeight, map->tileWidth, map->tileHeight);
 
 		for (tmx::TileSet& tileSet : map->tileSets){
 			TileSetTextures tst;
@@ -209,6 +217,7 @@ int main(int argc, char *agrc[])
 
 	if (!initialize(state)) {
 		return 1;
+
 	}
 
 	// load game assets
@@ -271,10 +280,7 @@ int main(int argc, char *agrc[])
 		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2;
 		gs.mapViewport.y = (gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2;
 		//gs.mapViewport.y = res.map->mapHeight * res.map->tileHeight - gs.mapViewport.h;  REMOVE
-
-		// perform drawing commands  REMOVE ?
-		//SDL_SetRenderDrawColor(state.renderer, 20, 10, 30, 255);
-		//SDL_RenderClear(state.renderer);
+;
 
 		// draw background images
 		SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
@@ -412,7 +418,7 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 			break;
 		}
 		case PlayerState::running: {
-			if (!currentDirection && obj.grounded) {
+			if (!currentDirection) {
 				obj.data.player.state = PlayerState::idle;
 				obj.texture = res.texIdle;
 				obj.currentAnimation = res.ANIM_PLAYER_IDLE;
@@ -447,34 +453,15 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	// add velocity to position
 	obj.position += obj.velocity * deltaTime;
 
-	//// handle collision detection REMOVE
-	//bool foundGround = false;
-	//for (auto& layer : gs.layers) {
-	//	for (GameObject& objB : layer) {
-	//		if (&obj != &objB) {
-	//			checkCollision(state, gs, res, obj, objB, deltaTime);
+	// handle collision detection
+	for (auto& layer : gs.layers) {
+		for (GameObject& objB : layer) {
+			if (&obj != &objB) {
+				checkCollision(state, gs, res, obj, objB, deltaTime);
 
-	//			if (objB.type == ObjectType::level && objB.collider.w != 0
-	//				&& objB.collider.h != 0) {
-	//				// grounded sensor
-	//				SDL_FRect sensor{
-	//					.x = obj.position.x + obj.collider.x,
-	//					.y = obj.position.y + obj.collider.y + obj.collider.h,
-	//					.w = obj.collider.w, .h = 1
-	//				};
-	//				SDL_FRect recB{
-	//					.x = objB.position.x + objB.collider.x,
-	//					.y = objB.position.y + objB.collider.y,
-	//					.w = objB.collider.w, .h = objB.collider.h
-	//				};
-	//				SDL_FRect recC{ 0 };
-	//				if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
-	//					foundGround = true;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+			}
+		}
+	}
 }
 
 void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime) {
@@ -530,7 +517,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 		// object we are coliding with
 		switch (objB.type) {
 			case ObjectType::level: {
-				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				objA.data.player.staminaPoints -= 10; // depleat stamina on hit
 				genericResponse();
 				break;
 			}
@@ -611,12 +598,11 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 				}
 				i++;
 			}
-			/* // REMOVE
 			if (!newLayer.empty()){
 				gs.layers.push_back(newLayer);
 				SDL_Log("Added layer '%s' with %zu tiles", layer.name.c_str(), newLayer.size());
 			}
-			*/
+			
 		}
 		void operator()(tmx::ObjectGroup& objectGroup) { // Object layers
 			std::vector<GameObject> newLayer;
