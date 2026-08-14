@@ -277,10 +277,8 @@ int main(int argc, char *agrc[])
 		}
 
 		// calculate viewport position 
-		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2;
-		gs.mapViewport.y = (gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2;
-		//gs.mapViewport.y = res.map->mapHeight * res.map->tileHeight - gs.mapViewport.h;  REMOVE
-;
+		gs.mapViewport.x = ((gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2) + 50;
+		gs.mapViewport.y = ((gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2 );
 
 		// draw background images
 		SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
@@ -299,9 +297,9 @@ int main(int argc, char *agrc[])
 			// Enhanced debug display with position and viewport info
 			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
 			SDL_RenderDebugText(state.renderer, 5, 5,
-				std::format("S: {}, G: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
+				std::format("S: {}, S: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
 					static_cast<int>(gs.player().data.player.state),
-					gs.player().grounded,
+					gs.player().data.player.staminaPoints,
 					gs.player().position.x,
 					gs.player().position.y,
 					gs.mapViewport.x,
@@ -424,15 +422,12 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 				obj.currentAnimation = res.ANIM_PLAYER_IDLE;
 			}
 			// moving in opposite direction of velocity, sliding!
-			if (obj.velocity.x * obj.direction < 0 && obj.grounded) {
-				
+			if (obj.velocity.x * obj.direction < 0) {
+				// add sliding animation
 			}
 			else {
 				
 			}
-			break;
-		}
-		case PlayerState::jumping: {
 			break;
 		}
 		}
@@ -459,6 +454,25 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 			if (&obj != &objB) {
 				checkCollision(state, gs, res, obj, objB, deltaTime);
 
+				// maybe usable for detecting ground = death ? FUTURE
+				//if (objB.type == ObjectType::level && objB.collider.w != 0
+				//	&& objB.collider.h != 0) {
+				//	// grounded sensor
+				//	SDL_FRect sensor{
+				//		.x = obj.position.x + obj.collider.x,
+				//		.y = obj.position.y + obj.collider.y + obj.collider.h,
+				//		.w = obj.collider.w, .h = 1
+				//	};
+				//	SDL_FRect recB{
+				//		.x = objB.position.x + objB.collider.x,
+				//		.y = objB.position.y + objB.collider.y,
+				//		.w = objB.collider.w, .h = objB.collider.h
+				//	};
+				//	SDL_FRect recC{ 0 };
+				//	if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
+				//		foundGround = true;
+				//	}
+				//}
 			}
 		}
 	}
@@ -517,8 +531,10 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 		// object we are coliding with
 		switch (objB.type) {
 			case ObjectType::level: {
+				glm::vec2 prevVel = objA.velocity;
 				objA.data.player.staminaPoints -= 10; // depleat stamina on hit
 				genericResponse();
+				objA.velocity = -prevVel; // push away from wall
 				break;
 			}
 			//case ObjectType::coin{}  FUTURE
@@ -629,6 +645,13 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					newLayer.push_back(player);
 					gs.playerIndex = 0;
 					gs.playerLayer = gs.layers.size();
+				}
+				else if (obj.type == "Coin") {
+					GameObject coin = createObject(1, 1, res.texSlide, ObjectType::coin);
+					coin.position = objPos;
+					coin.data.pickUp = PickUpData();
+					coin.dynamic = true;
+					// need to fill rest FUTURE
 				}
 			}
 			gs.layers.push_back(std::move(newLayer));

@@ -5,12 +5,12 @@
 #include "animation.h"
 
 enum class PlayerState {
-	idle, running, jumping
+	idle, running, noStamina, hit, dead
 	// idle, flying,no stamina, hit, dead
 };
 
-enum class CoinState { // coind and stamina recharge behave the same... FUTURE
-	colliding, inactive
+enum class PickUpState { 
+	idle, colliding, inactive
 };
 
 /*
@@ -25,17 +25,23 @@ enum class EnemyState {
 
 struct PlayerData {
 	PlayerState state;
-	Timer weaponTimer; // REMOVE
+	int collectedCoins;
 	int staminaPoints;
-	PlayerData() : weaponTimer(0.1f){
+	PlayerData() {
 		state = PlayerState::idle;
 		staminaPoints = 100;
+		collectedCoins = 0;
 	}
 };
 
 struct LevelData {};
 
-struct CoinData {};
+struct PickUpData {
+	PickUpState state;
+	PickUpData() : state(PickUpState::idle) {
+	}
+};
+
 
 /*
 struct EnemyData {
@@ -57,13 +63,13 @@ struct BulletData {
 union ObjectData {
 	PlayerData player;
 	LevelData level;
-	CoinData coin;
+	PickUpData pickUp;
 	//EnemyData enemy;
 	//BulletData bullet;
 };
 
 enum class ObjectType {
-	player, level, coin,
+	player, level, coin, juice,
 	//enemy, bullet
 };
 
@@ -77,7 +83,6 @@ struct GameObject {
 	int currentAnimation;
 	SDL_Texture* texture;
 	bool dynamic;
-	bool grounded; //REMOVE
 	SDL_FRect collider;
 	Timer flashTimer;
 	bool shouldFlash;
@@ -93,7 +98,6 @@ struct GameObject {
 		currentAnimation = -1;
 		texture = nullptr;
 		dynamic = false;
-		grounded = false;  // REMOVE
 		shouldFlash = false;
 		spriteFrame = 0;
 
