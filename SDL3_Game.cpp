@@ -73,8 +73,6 @@ struct Resources {
 	const int ANIM_PLAYER_IDLE = 0;
 	const int ANIM_PLAYER_RUN = 1;
 	const int ANIM_PLAYER_SLIDE = 2;
-	const int ANIM_PLAYER_SHOOT = 3;
-	const int ANIM_PLAYER_SLIDE_SHOOT = 4;
 	std::vector<Animation> playerAnims;
 
 	std::vector<SDL_Texture*> textures;
@@ -195,6 +193,10 @@ void cleanup(SDLState& state);
 void createTiles(const SDLState& state, GameState& gs, Resources& res);
 void drawParalaxBackground(SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime);
 void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float width, float hight, float deltaTime);
+void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);
+void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime);
+void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
+	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime);
 
 int main(int argc, char *agrc[])
 {
@@ -286,6 +288,24 @@ int main(int argc, char *agrc[])
 				drawObject(state, gs, obj, TILE_SIZE, TILE_SIZE, deltaTime);
 			}    
 		}
+
+		if (gs.debugMode == true) {
+			// Enhanced debug display with position and viewport info
+			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
+			SDL_RenderDebugText(state.renderer, 5, 5,
+				std::format("S: {}, G: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
+					static_cast<int>(gs.player().data.player.state),
+					gs.player().grounded,
+					gs.player().position.x,
+					gs.player().position.y,
+					gs.mapViewport.x,
+					gs.mapViewport.y
+				).c_str());
+		}
+
+		// swap buffers and present
+		SDL_RenderPresent(state.renderer);
+		prevTime = nowTime;
 	}
 	res.unload();
 	cleanup(state);
@@ -345,6 +365,180 @@ void cleanup(SDLState& state) {
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();
 }
+
+void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
+	// update animation
+	if (obj.currentAnimation != -1) {
+		obj.animations[obj.currentAnimation].step(deltaTime);
+	}
+
+	// if (obj.dynamic && !obj.grounded)
+	//if (obj.dynamic) { // apply gravity
+		//obj.velocity += glm::vec2(0, 500) * deltaTime;
+	//} REMOVE
+
+	// float moving = 0;
+	// float currentDirectionH and currentDirectionV
+	float currentDirection = 0;
+	if (obj.type == ObjectType::player) {
+		if (state.keys[SDL_SCANCODE_A]) {
+			currentDirection += -1;
+		}
+		if (state.keys[SDL_SCANCODE_D]) {
+			currentDirection += 1;
+		}
+		// add up and down directions FUTURE 
+
+		switch (obj.data.player.state) {
+		case PlayerState::idle: {
+			// switch to running state
+			if (currentDirection) {
+				obj.data.player.state = PlayerState::running;
+			}
+			else {
+				// expand for y axis FUTURE
+				// decelerate
+				if (obj.velocity.x) {
+					const float factor = obj.velocity.x > 0 ? -1.5f : 1.5f;
+					float amount = factor * obj.acceleration.x * deltaTime;
+					if (std::abs(obj.velocity.x) < std::abs(amount)) {
+						obj.velocity.x = 0;
+					}
+					else {
+						obj.velocity.x += amount;
+					}
+				}
+			}
+			break;
+		}
+		case PlayerState::running: {
+			if (!currentDirection && obj.grounded) {
+				obj.data.player.state = PlayerState::idle;
+				obj.texture = res.texIdle;
+				obj.currentAnimation = res.ANIM_PLAYER_IDLE;
+			}
+			// moving in opposite direction of velocity, sliding!
+			if (obj.velocity.x * obj.direction < 0 && obj.grounded) {
+				
+			}
+			else {
+				
+			}
+			break;
+		}
+		case PlayerState::jumping: {
+			break;
+		}
+		}
+
+	}
+	
+	
+
+	if (currentDirection)
+	{
+		obj.direction = currentDirection;
+	}
+	// add acceleration to velocity
+	obj.velocity += currentDirection * obj.acceleration * deltaTime;
+	if (std::abs(obj.velocity.x) > obj.maxSpeedX) {
+		obj.velocity.x = currentDirection * obj.maxSpeedX;
+	}
+	// add velocity to position
+	obj.position += obj.velocity * deltaTime;
+
+	//// handle collision detection REMOVE
+	//bool foundGround = false;
+	//for (auto& layer : gs.layers) {
+	//	for (GameObject& objB : layer) {
+	//		if (&obj != &objB) {
+	//			checkCollision(state, gs, res, obj, objB, deltaTime);
+
+	//			if (objB.type == ObjectType::level && objB.collider.w != 0
+	//				&& objB.collider.h != 0) {
+	//				// grounded sensor
+	//				SDL_FRect sensor{
+	//					.x = obj.position.x + obj.collider.x,
+	//					.y = obj.position.y + obj.collider.y + obj.collider.h,
+	//					.w = obj.collider.w, .h = 1
+	//				};
+	//				SDL_FRect recB{
+	//					.x = objB.position.x + objB.collider.x,
+	//					.y = objB.position.y + objB.collider.y,
+	//					.w = objB.collider.w, .h = objB.collider.h
+	//				};
+	//				SDL_FRect recC{ 0 };
+	//				if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
+	//					foundGround = true;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+}
+
+void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime) {
+	SDL_FRect recA{
+		.x = a.position.x + a.collider.x,
+		.y = a.position.y + a.collider.y,
+		.w = a.collider.w,
+		.h = a.collider.h
+	};
+	SDL_FRect recB{
+		.x = b.position.x + b.collider.x,
+		.y = b.position.y + b.collider.y,
+		.w = b.collider.w,
+		.h = b.collider.h
+	};
+	SDL_FRect recC{ 0 };
+
+	if (SDL_GetRectIntersectionFloat(&recA, &recB, &recC)) {
+		// found intersecction aka colision area
+		collisionResponse(state, gs, res, recA, recB, recC, a, b, deltaTime);
+	}
+}
+
+void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
+	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime) {
+
+	// pushes the object back so they stop cliping with what they collided
+	const auto genericResponse = [&]() {
+		if (recC.w < recC.h) {
+			// horizontal colision
+			if (objA.velocity.x > 0) { // going right
+				objA.position.x -= recC.w;
+			}
+			else if (objA.velocity.x < 0) { // going left
+				objA.position.x += recC.w;
+			}
+			objA.velocity.x = 0;
+		}
+		else {
+			// vertical collision
+			if (objA.velocity.y > 0) { // going down
+				objA.position.y -= recC.h;
+			}
+			else if (objA.velocity.y < 0) { // going up
+				objA.position.y += recC.h;
+			}
+			objA.velocity.y = 0;
+		}
+	};
+
+	//object we are checking 
+	if (objA.type == ObjectType::player) {
+		// object we are coliding with
+		switch (objB.type) {
+			case ObjectType::level: {
+				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				genericResponse();
+				break;
+			}
+			//case ObjectType::coin{}  FUTURE
+		}
+	}
+}
+
 
 void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 	struct LayerVisitor {

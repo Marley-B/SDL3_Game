@@ -9,6 +9,10 @@ enum class PlayerState {
 	// idle, flying,no stamina, hit, dead
 };
 
+enum class CoinState { // coind and stamina recharge behave the same... FUTURE
+	colliding, inactive
+};
+
 /*
 enum class BulletState {
 	moving, colliding, inactive
@@ -31,6 +35,8 @@ struct PlayerData {
 
 struct LevelData {};
 
+struct CoinData {};
+
 /*
 struct EnemyData {
 	EnemyState state;
@@ -51,12 +57,13 @@ struct BulletData {
 union ObjectData {
 	PlayerData player;
 	LevelData level;
+	CoinData coin;
 	//EnemyData enemy;
 	//BulletData bullet;
 };
 
 enum class ObjectType {
-	player, level, 
+	player, level, coin,
 	//enemy, bullet
 };
 
