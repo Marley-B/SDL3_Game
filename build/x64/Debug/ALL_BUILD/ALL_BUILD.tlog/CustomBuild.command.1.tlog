@@ -1,0 +1,10 @@
+^C:\01_FILEHUB\00_MEE\03_GAMES\SDL3_GAME\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/01_Filehub/00_MeE/03_Games/SDL3_Game -BC:/01_Filehub/00_MeE/03_Games/SDL3_Game/build --check-stamp-file C:/01_Filehub/00_MeE/03_Games/SDL3_Game/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

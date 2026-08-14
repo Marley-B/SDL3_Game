@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\SDL3_Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\SDL3_Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{71143A6B-F5E6-3367-B392-24300ECA988F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{B6DE9537-5751-3709-8232-495C2D8C327C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/01_Filehub/00_MeE/03_Games/SDL3_Game/SDL3_Game/CMakeLists.txt
+C:/Program Files/CMake/share/cmake-4.2/Modules/FeatureSummary.cmake
+C:/SDK/SDL3-3.4.12/cmake/SDL3Config.cmake
+C:/SDK/SDL3-3.4.12/cmake/SDL3ConfigVersion.cmake
+C:/SDK/SDL3-3.4.12/cmake/sdlcpu.cmake

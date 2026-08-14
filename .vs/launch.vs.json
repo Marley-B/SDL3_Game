@@ -1,0 +1,16 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "SDL3_Game.exe (SDL3_Game\\SDL3_Game.exe)",
+      "name": "SDL3_Game.exe (SDL3_Game\\SDL3_Game.exe)",
+      "env": {
+        "PATH": "C:\\SDK\\SDL3-3.4.12\\lib\\x64;C:\\SDK\\SDL3_image-3.4.4\\lib\\x64;C:\\SDK\\SDL3_mixer-3.2.4\\lib\\x64;%PATH%"
+      },
+      "currentDir": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game"
+    }
+  ]
+}
