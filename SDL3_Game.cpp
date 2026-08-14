@@ -42,7 +42,6 @@ struct SDLState {
 // general game components coordination
 struct GameState {
 	std::vector<std::vector<GameObject>> layers;
-	//std::vector<GameObject> bullets;
 	int playerLayer, playerIndex;
 	SDL_FRect mapViewport;
 	float bg2Scroll, bg3Scroll, bg4Scroll;
