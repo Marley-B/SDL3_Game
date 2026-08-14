@@ -284,7 +284,7 @@ int main(int argc, char *agrc[])
 		for (auto& layer : gs.layers) {
 			for (GameObject& obj : layer) {
 				drawObject(state, gs, obj, TILE_SIZE, TILE_SIZE, deltaTime);
-			}
+			}    
 		}
 	}
 	res.unload();
