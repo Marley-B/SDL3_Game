@@ -3,9 +3,10 @@
 #include <vector>
 #include <SDL3/SDL.h>	
 #include "animation.h"
+#include "timer.h"
 
 enum class PlayerState {
-	idle, running, noStamina, hit, dead
+	idle, running, flying, noStamina, hit, dead
 	// idle, flying,no stamina, hit, dead
 };
 
@@ -27,7 +28,8 @@ struct PlayerData {
 	PlayerState state;
 	int collectedCoins;
 	int staminaPoints;
-	PlayerData() {
+	Timer damagedTimer;
+	PlayerData() : damagedTimer(0.5f) {
 		state = PlayerState::idle;
 		staminaPoints = 100;
 		collectedCoins = 0;
@@ -77,8 +79,10 @@ struct GameObject {
 	ObjectType type;
 	ObjectData data;
 	glm::vec2 position, velocity, acceleration;
-	float direction;
+	float directionH;
+	float directionV;
 	float maxSpeedX;
+	float maxSpeedY;
 	std::vector<Animation> animations;
 	int currentAnimation;
 	SDL_Texture* texture;
@@ -92,8 +96,10 @@ struct GameObject {
 
 	GameObject() : data{ .level = LevelData() }, collider{ 0 }, flashTimer(0.05f) {
 		type = ObjectType::level;
-		direction = 1;
+		directionH = 1;
+		directionV = 1;
 		maxSpeedX = 0;
+		maxSpeedY = 0;
 		position = velocity = acceleration = glm::vec2(0);
 		currentAnimation = -1;
 		texture = nullptr;

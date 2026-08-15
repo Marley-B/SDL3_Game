@@ -1,8 +1,18 @@
-﻿// SDL3_Game.h : Include file for standard system include files,
-// or project specific include files.
-
-#pragma once
+﻿#pragma once
 
 #include <iostream>
-
-// TODO: Reference additional headers your program requires here.
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <vector>
+#include <string>
+#include <array>
+#include <format>
+#include <filesystem>
+#include "gameobject.h"
+#include "tmx.h"
+#include "sdlstate.h"
+#include "gamestate.h"
+#include "resources.h"
+#include "objectstate.h"

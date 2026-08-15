@@ -7,195 +7,24 @@
 //		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error loading audio", nullptr);
 //	}
 
-
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-#include <SDL3_image/SDL_image.h>
-#include <SDL3_mixer/SDL_mixer.h>
-#include <vector>
-#include <string>
-#include <array>
-#include <format>
-#include <filesystem>
 #include "SDL3_Game.h"
-#include "gameobject.h"
-#include "tmx.h"
 
 using namespace std;
 
 const int TILE_SIZE = 32;
 
-// SDL components coordination
-struct SDLState {
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	MIX_Mixer* mixer = nullptr;
-	int width, height, logW, logH;
-	const bool* keys;
-	bool fullscreen;
-
-	SDLState() : keys(SDL_GetKeyboardState(nullptr)) {
-		fullscreen = false;
-	}
-};
-
-// general game components coordination
-struct GameState {
-	std::vector<std::vector<GameObject>> layers;
-	//std::vector<GameObject> bullets;
-	int playerLayer, playerIndex;
-	SDL_FRect mapViewport;
-	float bg2Scroll, bg3Scroll, bg4Scroll;
-	bool debugMode;
-
-	GameState(const SDLState& state) {
-		playerLayer = -1;
-		playerIndex = -1;
-		mapViewport = SDL_FRect{
-			.x = 0, .y = 0,
-			.w = static_cast<float>(state.logW),
-			.h = static_cast<float>(state.logH)
-		};
-		bg2Scroll = bg3Scroll = bg4Scroll = 0;
-		debugMode = false;
-	}
-	GameObject& player() { return layers[playerLayer][playerIndex]; }
-};
-
-struct TileSetTextures
-{
-	int firstGid;
-	std::vector<SDL_Texture*> textures;
-};
-
-// Loads assets from memory
-struct Resources {
-	const int ANIM_PLAYER_IDLE = 0;
-	const int ANIM_PLAYER_RUN = 1;
-	const int ANIM_PLAYER_SLIDE = 2;
-	std::vector<Animation> playerAnims;
-
-	std::vector<SDL_Texture*> textures;
-	SDL_Texture* texIdle, * texRun, * texSlide, * texBg1, * texBg2, * texBg3, * texBg4;
-
-	std::vector<MIX_Audio*> audioEffects;
-	MIX_Audio* audioShoot, * audioShootHit, * audioEnemyHit;
-	std::vector<MIX_Track*> tracks;
-	MIX_Track* musicMain;
-
-	std::vector<TileSetTextures> tilesetTextures;
-	std::unique_ptr<tmx::Map> map; // currentlly only loads one map
-
-	SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& filepath) {
-		SDL_Texture* tex = IMG_LoadTexture(renderer, filepath.c_str());
-		if (!tex) { // fail state
-			SDL_Log("Failed to load texture: %s - %s", filepath.c_str(), SDL_GetError());
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error loading texture", nullptr);
-			return nullptr;
-		}
-		SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_NEAREST);
-		textures.push_back(tex);
-		return tex;
-	}
-
-	MIX_Audio* loadAudio(MIX_Mixer* mixer, const std::string& filepath) {
-		MIX_Audio* audio = MIX_LoadAudio(mixer, filepath.c_str(), true);
-		if (!audio) {
-			SDL_Log("Failed to load audio: %s - %s", filepath.c_str(), SDL_GetError());
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error loading audio", nullptr);
-			return nullptr;
-		}
-		else {
-			audioEffects.push_back(audio);
-		}
-		return audio;
-	}
-
-	MIX_Track* loadTrack(MIX_Mixer* mixer, const std::string& filepath) {
-		MIX_Audio* audio = MIX_LoadAudio(mixer, filepath.c_str(), true);
-		if (!audio) {
-			SDL_Log("Failed to load music audio: %s - %s", filepath.c_str(), SDL_GetError());
-			return nullptr;
-		}
-		audioEffects.push_back(audio);
-		MIX_Track* track = MIX_CreateTrack(mixer);
-		MIX_SetTrackAudio(track, audio);
-		MIX_SetTrackLoops(track, -1);  // Set to loop infinitely
-		tracks.push_back(track);
-		return track;
-	}
-
-	void load(SDLState& state) {
-		playerAnims.resize(3);
-		playerAnims[ANIM_PLAYER_IDLE] = Animation(8, 1.6f);
-		playerAnims[ANIM_PLAYER_RUN] = Animation(4, 0.5f);
-		playerAnims[ANIM_PLAYER_SLIDE] = Animation(1, 1.0f);
-
-		texIdle = loadTexture(state.renderer, "data/idle.png");
-		texRun = loadTexture(state.renderer, "data/run.png");
-		texSlide = loadTexture(state.renderer, "data/slide.png");
-		texBg1 = loadTexture(state.renderer, "data/bg/bg_layer1.png");
-		texBg2 = loadTexture(state.renderer, "data/bg/bg_layer2.png");
-		texBg3 = loadTexture(state.renderer, "data/bg/bg_layer3.png");
-		texBg4 = loadTexture(state.renderer, "data/bg/bg_layer4.png");
-
-		audioShoot = loadAudio(state.mixer, "data/audio/shoot.wav");
-		audioShootHit = loadAudio(state.mixer, "data/audio/wall_hit.wav");
-		audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
-		musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
-
-		// "C:\01_Filehub\00_MeE\03_Games\SDL3_Game\data\maps\smallmap.tmx"
-		map = tmx::loadMap("data/maps/smallmap.tmx");
-		if (!map)
-		{
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
-			return;
-		}
-		// Verify map properties
-		SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
-			map->mapWidth, map->mapHeight, map->tileWidth, map->tileHeight);
-
-		for (tmx::TileSet& tileSet : map->tileSets){
-			TileSetTextures tst;
-			tst.firstGid = tileSet.firstgid;
-
-			if (tileSet.tiles.size() == 1 && tileSet.count > 1){
-				// Only ONE image file, but it contains MULTIPLE tiles
-				// Single image tileset - load the main image once
-				const std::string imagePath = "data/tiles/" +
-					std::filesystem::path(tileSet.tiles[0].image.source).filename().string();
-				SDL_Texture* mainTexture = loadTexture(state.renderer, imagePath);
-
-				// Push the same texture for each tile in the set
-				for (int i = 0; i < tileSet.count; i++){
-					tst.textures.push_back(mainTexture);
-				}
-			}
-			else{
-				// Individual tile images
-				tst.textures.reserve(tileSet.tiles.size());
-				for (tmx::Tile& tile : tileSet.tiles){
-					const std::string imagePath = "data/tiles/" +
-						std::filesystem::path(tile.image.source).filename().string();
-					tst.textures.push_back(loadTexture(state.renderer, imagePath));
-				}
-			}
-			tilesetTextures.push_back(std::move(tst));
-		}
-	}
-
-	void unload() {
-		for (SDL_Texture* tex : textures) {
-			SDL_DestroyTexture(tex);
-		}
-		for (MIX_Audio* audio : audioEffects) {
-			MIX_DestroyAudio(audio);
-		}
-		for (MIX_Track* track : tracks) {
-			MIX_DestroyTrack(track);
-		}
-	}
-};
+GameState::GameState(const SDLState& state) {
+	playerLayer = -1;
+	playerIndex = -1;
+	mapViewport = SDL_FRect{
+		.x = 0, .y = 0,
+		.w = static_cast<float>(state.logW),
+		.h = static_cast<float>(state.logH)
+	};
+	bg2Scroll = bg3Scroll = bg4Scroll = 0;
+	debugMode = false;
+	ObjectState* currentStatePlayer = PlayerIdle::get();
+}
 
 bool initialize(SDLState& state);
 void cleanup(SDLState& state);
@@ -218,7 +47,6 @@ int main(int argc, char *agrc[])
 
 	if (!initialize(state)) {
 		return 1;
-
 	}
 
 	// load game assets
@@ -278,13 +106,9 @@ int main(int argc, char *agrc[])
 		}
 
 		// calculate viewport position 
-		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2;
+		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2  -50 ;
 		gs.mapViewport.y = (gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2;
-		//gs.mapViewport.y = res.map->mapHeight * res.map->tileHeight - gs.mapViewport.h;  REMOVE
 
-		// perform drawing commands  REMOVE ?
-		//SDL_SetRenderDrawColor(state.renderer, 20, 10, 30, 255);
-		//SDL_RenderClear(state.renderer);
 
 		// draw background images
 		SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
@@ -303,9 +127,9 @@ int main(int argc, char *agrc[])
 			// Enhanced debug display with position and viewport info
 			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
 			SDL_RenderDebugText(state.renderer, 5, 5,
-				std::format("S: {}, G: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
+				std::format("S: {}, St: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
 					static_cast<int>(gs.player().data.player.state),
-					gs.player().grounded,
+					gs.player().data.player.staminaPoints,
 					gs.player().position.x,
 					gs.player().position.y,
 					gs.mapViewport.x,
@@ -382,109 +206,103 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 		obj.animations[obj.currentAnimation].step(deltaTime);
 	}
 
-	// if (obj.dynamic && !obj.grounded)
-	//if (obj.dynamic) { // apply gravity
-		//obj.velocity += glm::vec2(0, 500) * deltaTime;
-	//} REMOVE
+	//// float moving = 0;
+	//// float currentDirectionH and currentDirectionV
+	//float currentDirection = 0;
+	//if (obj.type == ObjectType::player) {
+	//	if (state.keys[SDL_SCANCODE_A]) {
+	//		currentDirection += -1;
+	//	}
+	//	if (state.keys[SDL_SCANCODE_D]) {
+	//		currentDirection += 1;
+	//	}
+	//	// add up and down directions FUTURE 
 
-	// float moving = 0;
-	// float currentDirectionH and currentDirectionV
-	float currentDirection = 0;
-	if (obj.type == ObjectType::player) {
-		if (state.keys[SDL_SCANCODE_A]) {
-			currentDirection += -1;
-		}
-		if (state.keys[SDL_SCANCODE_D]) {
-			currentDirection += 1;
-		}
-		// add up and down directions FUTURE 
-
-		switch (obj.data.player.state) {
-		case PlayerState::idle: {
-			// switch to running state
-			if (currentDirection) {
-				obj.data.player.state = PlayerState::running;
-			}
-			else {
-				// expand for y axis FUTURE
-				// decelerate
-				if (obj.velocity.x) {
-					const float factor = obj.velocity.x > 0 ? -1.5f : 1.5f;
-					float amount = factor * obj.acceleration.x * deltaTime;
-					if (std::abs(obj.velocity.x) < std::abs(amount)) {
-						obj.velocity.x = 0;
-					}
-					else {
-						obj.velocity.x += amount;
-					}
-				}
-			}
-			break;
-		}
-		case PlayerState::running: {
-			if (!currentDirection && obj.grounded) {
-				obj.data.player.state = PlayerState::idle;
-				obj.texture = res.texIdle;
-				obj.currentAnimation = res.ANIM_PLAYER_IDLE;
-			}
-			// moving in opposite direction of velocity, sliding!
-			if (obj.velocity.x * obj.direction < 0 && obj.grounded) {
-				
-			}
-			else {
-				
-			}
-			break;
-		}
-		case PlayerState::jumping: {
-			break;
-		}
-		}
-
-	}
-	
-	
-
-	if (currentDirection)
-	{
-		obj.direction = currentDirection;
-	}
-	// add acceleration to velocity
-	obj.velocity += currentDirection * obj.acceleration * deltaTime;
-	if (std::abs(obj.velocity.x) > obj.maxSpeedX) {
-		obj.velocity.x = currentDirection * obj.maxSpeedX;
-	}
-	// add velocity to position
-	obj.position += obj.velocity * deltaTime;
-
-	//// handle collision detection REMOVE
-	//bool foundGround = false;
-	//for (auto& layer : gs.layers) {
-	//	for (GameObject& objB : layer) {
-	//		if (&obj != &objB) {
-	//			checkCollision(state, gs, res, obj, objB, deltaTime);
-
-	//			if (objB.type == ObjectType::level && objB.collider.w != 0
-	//				&& objB.collider.h != 0) {
-	//				// grounded sensor
-	//				SDL_FRect sensor{
-	//					.x = obj.position.x + obj.collider.x,
-	//					.y = obj.position.y + obj.collider.y + obj.collider.h,
-	//					.w = obj.collider.w, .h = 1
-	//				};
-	//				SDL_FRect recB{
-	//					.x = objB.position.x + objB.collider.x,
-	//					.y = objB.position.y + objB.collider.y,
-	//					.w = objB.collider.w, .h = objB.collider.h
-	//				};
-	//				SDL_FRect recC{ 0 };
-	//				if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
-	//					foundGround = true;
+	//	switch (obj.data.player.state) {
+	//	case PlayerState::idle: {
+	//		// switch to running state
+	//		if (currentDirection) {
+	//			obj.data.player.state = PlayerState::running;
+	//		}
+	//		else {
+	//			// expand for y axis FUTURE
+	//			// decelerate
+	//			if (obj.velocity.x) {
+	//				const float factor = obj.velocity.x > 0 ? -1.5f : 1.5f;
+	//				float amount = factor * obj.acceleration.x * deltaTime;
+	//				if (std::abs(obj.velocity.x) < std::abs(amount)) {
+	//					obj.velocity.x = 0;
+	//				}
+	//				else {
+	//					obj.velocity.x += amount;
 	//				}
 	//			}
 	//		}
+	//		break;
 	//	}
+	//	case PlayerState::running: {
+	//		if (!currentDirection ) {
+	//			obj.data.player.state = PlayerState::idle;
+	//			obj.texture = res.texIdle;
+	//			obj.currentAnimation = res.ANIM_PLAYER_IDLE;
+	//		}
+	//		// moving in opposite direction of velocity, sliding!
+	//		if (obj.velocity.x * obj.directionH < 0 ) {
+	//			
+	//		}
+	//		else {
+	//			
+	//		}
+	//		break;
+	//	}
+
+	//	}
+
 	//}
+	//
+	//
+
+	//if (currentDirection)
+	//{
+	//	obj.directionH = currentDirection;
+	//}
+	//// add acceleration to velocity
+	//obj.velocity += currentDirection * obj.acceleration * deltaTime;
+	//if (std::abs(obj.velocity.x) > obj.maxSpeedX) {
+	//	obj.velocity.x = currentDirection * obj.maxSpeedX;
+	//}
+	//// add velocity to position
+	//obj.position += obj.velocity * deltaTime;
+
+	// handle collision detection 
+	bool foundGround = false;
+	for (auto& layer : gs.layers) {
+		for (GameObject& objB : layer) {
+			if (&obj != &objB) {
+				checkCollision(state, gs, res, obj, objB, deltaTime);
+
+				// Maybe to detect bottom to activate death? FUTURE
+				//if (objB.type == ObjectType::level && objB.collider.w != 0
+				//	&& objB.collider.h != 0) {
+				//	// grounded sensor
+				//	SDL_FRect sensor{
+				//		.x = obj.position.x + obj.collider.x,
+				//		.y = obj.position.y + obj.collider.y + obj.collider.h,
+				//		.w = obj.collider.w, .h = 1
+				//	};
+				//	SDL_FRect recB{
+				//		.x = objB.position.x + objB.collider.x,
+				//		.y = objB.position.y + objB.collider.y,
+				//		.w = objB.collider.w, .h = objB.collider.h
+				//	};
+				//	SDL_FRect recC{ 0 };
+				//	if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
+				//		foundGround = true;
+				//	}
+				//}
+			}
+		}
+	}
 }
 
 void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime) {
@@ -541,7 +359,10 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 		switch (objB.type) {
 			case ObjectType::level: {
 				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				glm::vec2 prevVel = objA.velocity;
 				genericResponse();
+				objA.velocity = -prevVel; // bounce of wall
+				objA.shouldFlash;
 				break;
 			}
 			//case ObjectType::coin{}  FUTURE
@@ -621,12 +442,10 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 				}
 				i++;
 			}
-			/* // REMOVE
 			if (!newLayer.empty()){
 				gs.layers.push_back(newLayer);
 				SDL_Log("Added layer '%s' with %zu tiles", layer.name.c_str(), newLayer.size());
 			}
-			*/
 		}
 		void operator()(tmx::ObjectGroup& objectGroup) { // Object layers
 			std::vector<GameObject> newLayer;
@@ -642,9 +461,11 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					player.data.player = PlayerData();
 					player.animations = res.playerAnims;
 					player.currentAnimation = res.ANIM_PLAYER_IDLE;
-					player.acceleration = glm::vec2(300, 0);
+					player.acceleration = glm::vec2(300, 300);
 					player.maxSpeedX = 100;
-					player.direction = 1;
+					player.maxSpeedY = 100;
+					player.directionH = 1;
+					player.directionV = 1;
 					player.dynamic = true;
 					player.collider = {
 						.x = 11, .y = 6,
@@ -707,7 +528,7 @@ void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float wid
 		.h = hight
 	};
 
-	SDL_FlipMode flipMode = obj.direction == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+	SDL_FlipMode flipMode = obj.directionH == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 	if (!obj.shouldFlash) {
 		SDL_RenderTextureRotated(state.renderer, obj.texture, &src, &dst, 0, nullptr, flipMode);
 	}
