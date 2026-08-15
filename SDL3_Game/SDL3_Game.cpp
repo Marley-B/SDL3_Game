@@ -23,18 +23,9 @@ GameState::GameState(const SDLState& state) {
 	};
 	bg2Scroll = bg3Scroll = bg4Scroll = 0;
 	debugMode = false;
-	ObjectState* currentStatePlayer = PlayerIdle::get();
+	currentStatePlayer = PlayerIdle::get();
 }
 
-bool initialize(SDLState& state);
-void cleanup(SDLState& state);
-void createTiles(const SDLState& state, GameState& gs, Resources& res);
-void drawParalaxBackground(SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime);
-void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float width, float hight, float deltaTime);
-void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);
-void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime);
-void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
-	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime);
 
 int main(int argc, char *agrc[])
 {
@@ -81,6 +72,14 @@ int main(int argc, char *agrc[])
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
+					// Handle the key event for all dynamic objects
+					for (auto& layer : gs.layers) {
+						for (GameObject& obj : layer) {
+							if (obj.dynamic) {
+								gs.currentStatePlayer->handleEvent(event, res, obj, gs);
+							}
+						}
+					}
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {
@@ -94,6 +93,7 @@ int main(int argc, char *agrc[])
 					break;
 				}
 			}
+
 		}
 
 		// update all objects
@@ -127,8 +127,10 @@ int main(int argc, char *agrc[])
 			// Enhanced debug display with position and viewport info
 			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
 			SDL_RenderDebugText(state.renderer, 5, 5,
-				std::format("S: {}, St: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
-					static_cast<int>(gs.player().data.player.state),
+				std::format("S: {}, A: {}, St: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
+					//static_cast<int>(gs.player().data.player.state),
+					typeid(*gs.currentStatePlayer).name(),
+					gs.player().currentAnimation,
 					gs.player().data.player.staminaPoints,
 					gs.player().position.x,
 					gs.player().position.y,
@@ -205,6 +207,8 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	if (obj.currentAnimation != -1) {
 		obj.animations[obj.currentAnimation].step(deltaTime);
 	}
+
+	gs.currentStatePlayer->update(obj, deltaTime);
 
 	//// float moving = 0;
 	//// float currentDirectionH and currentDirectionV

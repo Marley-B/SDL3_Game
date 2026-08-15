@@ -14,9 +14,12 @@ PlayerIdle* PlayerIdle::get() {
 bool PlayerIdle::enter(Resources& res, GameObject& obj) {
     obj.texture = res.texIdle;
     obj.currentAnimation = res.ANIM_PLAYER_IDLE;
+    return true;
 }
 
-void PlayerIdle::handleEvent(SDL_Event& e, GameObject& obj, GameState& gs) {
+void PlayerIdle::handleEvent(SDL_Event& e, Resources& res, GameObject& obj, GameState& gs) {
+    SDL_Log("Entered idle handle event");
+
     //If a key was pressed
     if (e.type == SDL_EVENT_KEY_DOWN && e.key.repeat == 0)
     {
@@ -24,16 +27,16 @@ void PlayerIdle::handleEvent(SDL_Event& e, GameObject& obj, GameState& gs) {
         float currentDirectionV = 0;
         switch (e.key.key)
         {
-        case SDLK_A: currentDirectionH += -1; break;
-        case SDLK_D: currentDirectionH += 1; break;
-        case SDLK_W: currentDirectionV += -1; break;
-        case SDLK_S: currentDirectionV += +1; break;
+        case SDLK_LEFT: currentDirectionH += -1; break;
+        case SDLK_RIGHT: currentDirectionH += 1; break;
+        case SDLK_UP: currentDirectionV += -1; break;
+        case SDLK_DOWN: currentDirectionV += +1; break;
         }
         obj.directionH = currentDirectionH;
         obj.directionV = currentDirectionV;
 
         if (currentDirectionH != 0 || currentDirectionV != 0) { // if the player started moving
-            changeState(PlayerFly::get(), gs.currentStatePlayer);
+            changeState(PlayerFly::get(), gs.currentStatePlayer, res, obj);
         }
     }
 }
@@ -63,9 +66,10 @@ PlayerFly* PlayerFly::get() {
 bool PlayerFly::enter(Resources& res, GameObject& obj) {
     obj.texture = res.texRun;
     obj.currentAnimation = res.ANIM_PLAYER_RUN;
+    return true;
 }
 
-void PlayerFly::handleEvent(SDL_Event& e, GameObject& obj, GameState& gs) {
+void PlayerFly::handleEvent(SDL_Event& e, Resources& res, GameObject& obj, GameState& gs) {
     //If a key was pressed
     if (e.type == SDL_EVENT_KEY_DOWN && e.key.repeat == 0)
     {
@@ -73,16 +77,16 @@ void PlayerFly::handleEvent(SDL_Event& e, GameObject& obj, GameState& gs) {
         float currentDirectionV = 0;
         switch (e.key.key)
         {
-        case SDLK_A: currentDirectionH += -1; break;
-        case SDLK_D: currentDirectionH += 1; break;
-        case SDLK_W: currentDirectionV += -1; break;
-        case SDLK_S: currentDirectionV += +1; break;
+        case SDLK_LEFT: currentDirectionH += -1; break;
+        case SDLK_RIGHT: currentDirectionH += 1; break;
+        case SDLK_UP: currentDirectionV += -1; break;
+        case SDLK_DOWN: currentDirectionV += +1; break;
         }
         obj.directionH = currentDirectionH;
         obj.directionV = currentDirectionH;
 
         if (currentDirectionH == 0 && currentDirectionV == 0) { // if the player stoped moving
-            changeState(PlayerIdle::get(), gs.currentStatePlayer);
+            changeState(PlayerIdle::get(), gs.currentStatePlayer, res, obj);
         }
     }
 }
@@ -104,9 +108,10 @@ void PlayerFly::update(GameObject& obj, float deltaTime) {
 
 
 // on main we create both newState and currentState FUTURE
-bool changeState(ObjectState* newState, ObjectState*& currentState) {
+bool changeState(ObjectState* newState, ObjectState*& currentState, Resources& res, GameObject& obj) {
     if (newState != nullptr && newState != currentState) {
         currentState = newState;
+        currentState->enter(res, obj);
         return true;
     }
     return false;
