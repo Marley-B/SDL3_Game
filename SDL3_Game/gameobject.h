@@ -29,10 +29,12 @@ struct PlayerData {
 	int collectedCoins;
 	int staminaPoints;
 	Timer damagedTimer;
+	bool invincible;
 	PlayerData() : damagedTimer(0.5f) {
 		state = PlayerState::idle;
 		staminaPoints = 100;
 		collectedCoins = 0;
+		invincible = false;
 	}
 };
 
@@ -91,10 +93,11 @@ struct GameObject {
 	Timer flashTimer;
 	bool shouldFlash;
 	int spriteFrame;
+	float visualDirectionH = 1;
 
 	bool colliding; //?
 
-	GameObject() : data{ .level = LevelData() }, collider{ 0 }, flashTimer(0.05f) {
+	GameObject() : data{ .level = LevelData() }, collider{ 0 }, flashTimer(0.5f) {
 		type = ObjectType::level;
 		directionH = 1;
 		directionV = 1;

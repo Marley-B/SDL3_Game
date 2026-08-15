@@ -90,6 +90,13 @@ int main(int argc, char *agrc[])
 						state.fullscreen = !state.fullscreen;
 						SDL_SetWindowFullscreen(state.window, state.fullscreen);
 					}
+					for (auto& layer : gs.layers) {
+						for (GameObject& obj : layer) {
+							if (obj.dynamic) {
+								gs.currentStatePlayer->handleEvent(event, res, obj, gs);
+							}
+						}
+					}
 					break;
 				}
 			}
@@ -127,15 +134,14 @@ int main(int argc, char *agrc[])
 			// Enhanced debug display with position and viewport info
 			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
 			SDL_RenderDebugText(state.renderer, 5, 5,
-				std::format("S: {}, A: {}, St: {}, Pos:({:.1f},{:.1f}), VP:({:.1f},{:.1f})",
-					//static_cast<int>(gs.player().data.player.state),
+				std::format("S: {}, A: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
 					typeid(*gs.currentStatePlayer).name(),
 					gs.player().currentAnimation,
 					gs.player().data.player.staminaPoints,
 					gs.player().position.x,
 					gs.player().position.y,
-					gs.mapViewport.x,
-					gs.mapViewport.y
+					gs.player().directionH,
+					gs.player().directionV
 				).c_str());
 		}
 
@@ -207,76 +213,14 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	if (obj.currentAnimation != -1) {
 		obj.animations[obj.currentAnimation].step(deltaTime);
 	}
-
+	
 	gs.currentStatePlayer->update(obj, deltaTime);
 
-	//// float moving = 0;
-	//// float currentDirectionH and currentDirectionV
-	//float currentDirection = 0;
-	//if (obj.type == ObjectType::player) {
-	//	if (state.keys[SDL_SCANCODE_A]) {
-	//		currentDirection += -1;
-	//	}
-	//	if (state.keys[SDL_SCANCODE_D]) {
-	//		currentDirection += 1;
-	//	}
-	//	// add up and down directions FUTURE 
-
-	//	switch (obj.data.player.state) {
-	//	case PlayerState::idle: {
-	//		// switch to running state
-	//		if (currentDirection) {
-	//			obj.data.player.state = PlayerState::running;
-	//		}
-	//		else {
-	//			// expand for y axis FUTURE
-	//			// decelerate
-	//			if (obj.velocity.x) {
-	//				const float factor = obj.velocity.x > 0 ? -1.5f : 1.5f;
-	//				float amount = factor * obj.acceleration.x * deltaTime;
-	//				if (std::abs(obj.velocity.x) < std::abs(amount)) {
-	//					obj.velocity.x = 0;
-	//				}
-	//				else {
-	//					obj.velocity.x += amount;
-	//				}
-	//			}
-	//		}
-	//		break;
-	//	}
-	//	case PlayerState::running: {
-	//		if (!currentDirection ) {
-	//			obj.data.player.state = PlayerState::idle;
-	//			obj.texture = res.texIdle;
-	//			obj.currentAnimation = res.ANIM_PLAYER_IDLE;
-	//		}
-	//		// moving in opposite direction of velocity, sliding!
-	//		if (obj.velocity.x * obj.directionH < 0 ) {
-	//			
-	//		}
-	//		else {
-	//			
-	//		}
-	//		break;
-	//	}
-
-	//	}
-
-	//}
-	//
-	//
-
-	//if (currentDirection)
-	//{
-	//	obj.directionH = currentDirection;
-	//}
-	//// add acceleration to velocity
-	//obj.velocity += currentDirection * obj.acceleration * deltaTime;
-	//if (std::abs(obj.velocity.x) > obj.maxSpeedX) {
-	//	obj.velocity.x = currentDirection * obj.maxSpeedX;
-	//}
-	//// add velocity to position
-	//obj.position += obj.velocity * deltaTime;
+	if (obj.data.player.invincible) {
+		if (obj.data.player.damagedTimer.step(deltaTime)) {
+			obj.data.player.invincible = false;
+		}
+	}
 
 	// handle collision detection 
 	bool foundGround = false;
@@ -310,6 +254,11 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 }
 
 void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime) {
+	// If it has no colliders
+	if (a.collider.w == 0 || a.collider.h == 0 || b.collider.w == 0 || b.collider.h == 0) {
+		return;
+	}
+
 	SDL_FRect recA{
 		.x = a.position.x + a.collider.x,
 		.y = a.position.y + a.collider.y,
@@ -362,11 +311,14 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 		// object we are coliding with
 		switch (objB.type) {
 			case ObjectType::level: {
-				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				if (!objA.data.player.invincible) {
+					objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+					objA.data.player.invincible = true;
+				}
 				glm::vec2 prevVel = objA.velocity;
 				genericResponse();
 				objA.velocity = -prevVel; // bounce of wall
-				objA.shouldFlash;
+				objA.shouldFlash = true;
 				break;
 			}
 			//case ObjectType::coin{}  FUTURE
@@ -441,6 +393,8 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					if (layer.name != "Level") {
 						tile.collider.w = 0;
 						tile.collider.h = 0;
+						tile.collider.y = 0;
+						tile.collider.x = 0;
 					}
 					newLayer.push_back(tile);
 				}
@@ -465,11 +419,11 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					player.data.player = PlayerData();
 					player.animations = res.playerAnims;
 					player.currentAnimation = res.ANIM_PLAYER_IDLE;
-					player.acceleration = glm::vec2(300, 300);
-					player.maxSpeedX = 100;
-					player.maxSpeedY = 100;
-					player.directionH = 1;
-					player.directionV = 1;
+					player.acceleration = glm::vec2(200, 200);
+					player.maxSpeedX = 130;
+					player.maxSpeedY = 130;
+					player.directionH = 0;
+					player.directionV = 0;
 					player.dynamic = true;
 					player.collider = {
 						.x = 11, .y = 6,
@@ -532,7 +486,7 @@ void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float wid
 		.h = hight
 	};
 
-	SDL_FlipMode flipMode = obj.directionH == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+	SDL_FlipMode flipMode = obj.visualDirectionH == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 	if (!obj.shouldFlash) {
 		SDL_RenderTextureRotated(state.renderer, obj.texture, &src, &dst, 0, nullptr, flipMode);
 	}

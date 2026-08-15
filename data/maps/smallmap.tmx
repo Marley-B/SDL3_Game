@@ -50,7 +50,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Characters">
-  <object id="1" name="Player" type="Player" x="431.691" y="558.442"/>
+  <object id="1" name="Player" type="Player" x="431.691" y="520.442"/>
  </objectgroup>
  <layer id="3" name="Foreground" width="30" height="20">
   <data encoding="csv">
