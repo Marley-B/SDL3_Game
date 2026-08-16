@@ -61,6 +61,17 @@ int main(int argc, char *agrc[])
 		SDL_Event event{ 0 };
 
 		while (SDL_PollEvent(&event)) {
+			// all events that trigger a change in user state
+			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP || event.type == UserEvents::STAMINA_DEPLETED) {
+				for (auto& layer : gs.layers) {
+					for (GameObject& obj : layer) {
+						if (obj.dynamic) {
+							gs.currentStatePlayer->handleEvent(event, res, obj, gs);
+						}
+					}
+				}
+			}
+
 			switch (event.type) {
 				case SDL_EVENT_QUIT: {
 					running = false;
@@ -72,14 +83,6 @@ int main(int argc, char *agrc[])
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
-					// Handle the key event for all dynamic objects
-					for (auto& layer : gs.layers) {
-						for (GameObject& obj : layer) {
-							if (obj.dynamic) {
-								gs.currentStatePlayer->handleEvent(event, res, obj, gs);
-							}
-						}
-					}
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {
@@ -89,13 +92,6 @@ int main(int argc, char *agrc[])
 					else if (event.key.scancode == SDL_SCANCODE_F11) {
 						state.fullscreen = !state.fullscreen;
 						SDL_SetWindowFullscreen(state.window, state.fullscreen);
-					}
-					for (auto& layer : gs.layers) {
-						for (GameObject& obj : layer) {
-							if (obj.dynamic) {
-								gs.currentStatePlayer->handleEvent(event, res, obj, gs);
-							}
-						}
 					}
 					break;
 				}
@@ -154,72 +150,24 @@ int main(int argc, char *agrc[])
 	return 0;
 }
 
-bool initialize(SDLState& state) {
-
-	bool initSucces = true;
-	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL3", nullptr);
-		initSucces = false;
-	}
-
-	// create window
-	state.window = SDL_CreateWindow("Undertale", state.width, state.height, SDL_WINDOW_RESIZABLE);
-	if (!state.window) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", nullptr);
-		cleanup(state);
-		initSucces = false;
-	}
-
-	// create the renderer
-	state.renderer = SDL_CreateRenderer(state.window, nullptr);
-	if (!state.renderer) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating renderer", nullptr);
-		cleanup(state);
-		initSucces = false;
-	}
-	SDL_SetRenderVSync(state.renderer, 1);
-
-	// configure presentation
-	SDL_SetRenderLogicalPresentation(state.renderer, state.logW, state.logH, SDL_LOGICAL_PRESENTATION_LETTERBOX);
-
-	if (!MIX_Init()) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL_mixer", nullptr);
-		cleanup(state);
-		initSucces = false;
-	}
-
-	// initialize the SDL_mixer audio pointer
-	state.mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-	if (!state.mixer) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
-		cleanup(state);
-		initSucces = false;
-	}
-
-	return initSucces;
-}
-
-void cleanup(SDLState& state) {
-	if (state.mixer) {
-		MIX_DestroyMixer(state.mixer);
-	}
-	SDL_DestroyRenderer(state.renderer);
-	SDL_DestroyWindow(state.window);
-	SDL_Quit();
-}
-
 void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
 	// update animation
 	if (obj.currentAnimation != -1) {
 		obj.animations[obj.currentAnimation].step(deltaTime);
 	}
 	
+	// update the player according to their current state
 	gs.currentStatePlayer->update(obj, deltaTime);
 
 	if (obj.data.player.invincible) {
 		if (obj.data.player.damagedTimer.step(deltaTime)) {
 			obj.data.player.invincible = false;
 		}
+	}
+
+	if (obj.data.player.staminaPoints <= 0) {
+		SDL_Event event{ UserEvents::STAMINA_DEPLETED };
+		SDL_PushEvent(&event);
 	}
 
 	// handle collision detection 
@@ -524,4 +472,58 @@ void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float wid
 		SDL_RenderFillRect(state.renderer, &sensor);
 		SDL_SetRenderDrawBlendMode(state.renderer, SDL_BLENDMODE_NONE);
 	}
+}
+
+bool initialize(SDLState& state) {
+
+	bool initSucces = true;
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL3", nullptr);
+		initSucces = false;
+	}
+
+	// create window
+	state.window = SDL_CreateWindow("Undertale", state.width, state.height, SDL_WINDOW_RESIZABLE);
+	if (!state.window) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", nullptr);
+		cleanup(state);
+		initSucces = false;
+	}
+
+	// create the renderer
+	state.renderer = SDL_CreateRenderer(state.window, nullptr);
+	if (!state.renderer) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating renderer", nullptr);
+		cleanup(state);
+		initSucces = false;
+	}
+	SDL_SetRenderVSync(state.renderer, 1);
+
+	// configure presentation
+	SDL_SetRenderLogicalPresentation(state.renderer, state.logW, state.logH, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+	if (!MIX_Init()) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error initializing SDL_mixer", nullptr);
+		cleanup(state);
+		initSucces = false;
+	}
+
+	// initialize the SDL_mixer audio pointer
+	state.mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+	if (!state.mixer) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
+		cleanup(state);
+		initSucces = false;
+	}
+
+	return initSucces;
+}
+
+void cleanup(SDLState& state) {
+	if (state.mixer) {
+		MIX_DestroyMixer(state.mixer);
+	}
+	SDL_DestroyRenderer(state.renderer);
+	SDL_DestroyWindow(state.window);
+	SDL_Quit();
 }

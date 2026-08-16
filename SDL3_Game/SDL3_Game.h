@@ -10,12 +10,13 @@
 #include <array>
 #include <format>
 #include <filesystem>
-#include "gameobject.h"
+#include "game_object.h"
 #include "tmx.h"
 #include "sdlstate.h"
-#include "gamestate.h"
+#include "game_state.h"
 #include "resources.h"
-#include "objectstate.h"
+#include "object_state.h"
+#include "user_events.h"
 
 
 bool initialize(SDLState& state);

@@ -6,7 +6,7 @@ find_package(SDL3_image REQUIRED)
 find_package(glm REQUIRED)
 find_package(SDL3_mixer REQUIRED)
 # Add source to this project's executable.
-add_executable (SDL3_Game "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" "objectstate.cpp"
+add_executable (SDL3_Game "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" "object_state.cpp"
     "resources.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
