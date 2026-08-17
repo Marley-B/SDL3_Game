@@ -62,7 +62,8 @@ int main(int argc, char *agrc[])
 
 		while (SDL_PollEvent(&event)) {
 			// all events that trigger a change in user state
-			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP || event.type == UserEvents::STAMINA_DEPLETED) {
+			if (event.type == SDL_EVENT_KEY_DOWN || event.type == SDL_EVENT_KEY_UP || 
+				event.type == UserEvents::STAMINA_DEPLETED || event.type == UserEvents::STAMINA_RESTORED) {
 				for (auto& layer : gs.layers) {
 					for (GameObject& obj : layer) {
 						if (obj.dynamic) {
@@ -270,6 +271,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 				break;
 			}
 			//case ObjectType::coin{}  FUTURE
+			//case ObjectType::juice{}
 		}
 	}
 }
@@ -365,6 +367,7 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					GameObject player = createObject(1, 1, res.texIdle, ObjectType::player);
 					player.position = objPos;
 					player.data.player = PlayerData();
+					player.data.player.collectedCoins = 0;
 					player.animations = res.playerAnims;
 					player.currentAnimation = res.ANIM_PLAYER_IDLE;
 					player.acceleration = glm::vec2(200, 200);
@@ -380,6 +383,34 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					newLayer.push_back(player);
 					gs.playerIndex = 0;
 					gs.playerLayer = gs.layers.size();
+				}
+				else if (obj.type == "Coin") {
+					GameObject coin = createObject(1, 1, res.texSlide, ObjectType::coin);
+					coin.data.pickUp = PickUpData();
+					coin.data.pickUp.value = 1;
+					coin.position = objPos;
+					coin.animations = res.playerAnims; // REMOVE for item anim
+					coin.currentAnimation = res.ANIM_PLAYER_IDLE;
+					coin.dynamic = true;
+					coin.collider = {
+						.x = 11, .y = 6,
+						.w = 10, .h = 26
+					};
+					newLayer.push_back(coin);
+				}
+				else if (obj.type == "Juice") {
+					GameObject juice = createObject(1, 1, res.texIdle, ObjectType::juice);
+					juice.data.pickUp = PickUpData();
+					juice.data.pickUp.value = 50;
+					juice.position = objPos;
+					juice.animations = res.playerAnims; // REMOVE for item anim
+					juice.currentAnimation = res.ANIM_PLAYER_IDLE;
+					juice.dynamic = true;
+					juice.collider = {
+						.x = 11, .y = 6,
+						.w = 10, .h = 26
+					};
+					newLayer.push_back(juice);
 				}
 			}
 			gs.layers.push_back(std::move(newLayer));

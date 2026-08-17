@@ -5,14 +5,14 @@
 #include "animation.h"
 #include "timer.h"
 
-enum class PlayerState {
-	idle, running, flying, noStamina, hit, dead
-	// idle, flying,no stamina, hit, dead
-};
-
-enum class PickUpState { 
-	idle, colliding, inactive
-};
+//enum class PlayerState {
+//	idle, running, flying, noStamina, hit, dead
+//	// idle, flying,no stamina, hit, dead
+//};
+//
+//enum class PickUpState { 
+//	idle, colliding, inactive
+//};
 
 /*
 enum class BulletState {
@@ -25,13 +25,13 @@ enum class EnemyState {
 */
 
 struct PlayerData {
-	PlayerState state;
+	//PlayerState state;
 	int collectedCoins;
 	float staminaPoints;
 	Timer damagedTimer;
 	bool invincible;
 	PlayerData() : damagedTimer(0.5f) {
-		state = PlayerState::idle;
+		//state = PlayerState::idle;
 		staminaPoints = 100;
 		collectedCoins = 0;
 		invincible = false;
@@ -41,8 +41,11 @@ struct PlayerData {
 struct LevelData {};
 
 struct PickUpData {
-	PickUpState state;
-	PickUpData() : state(PickUpState::idle) {
+	//PickUpState state;
+	//PickUpData() : state(PickUpState::idle) 
+	float value;
+	PickUpData() {
+		value = 0;
 	}
 };
 
