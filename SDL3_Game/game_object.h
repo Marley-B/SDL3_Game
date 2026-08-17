@@ -10,9 +10,9 @@
 //	// idle, flying,no stamina, hit, dead
 //};
 //
-//enum class PickUpState { 
-//	idle, colliding, inactive
-//};
+enum class PickUpState { 
+	idle, colliding, inactive
+};
 
 /*
 enum class BulletState {
@@ -30,9 +30,11 @@ struct PlayerData {
 	float staminaPoints;
 	Timer damagedTimer;
 	bool invincible;
+	int maxStamina;
 	PlayerData() : damagedTimer(0.5f) {
 		//state = PlayerState::idle;
 		staminaPoints = 100;
+		maxStamina = 100;
 		collectedCoins = 0;
 		invincible = false;
 	}
@@ -41,10 +43,9 @@ struct PlayerData {
 struct LevelData {};
 
 struct PickUpData {
-	//PickUpState state;
-	//PickUpData() : state(PickUpState::idle) 
+	PickUpState state;
 	float value;
-	PickUpData() {
+	PickUpData() : state(PickUpState::idle) {
 		value = 0;
 	}
 };
@@ -97,8 +98,7 @@ struct GameObject {
 	bool shouldFlash;
 	int spriteFrame;
 	float visualDirectionH = 1;
-
-	bool colliding; //?
+	bool invisible;
 
 	GameObject() : data{ .level = LevelData() }, collider{ 0 }, flashTimer(0.5f) {
 		type = ObjectType::level;
@@ -113,6 +113,6 @@ struct GameObject {
 		shouldFlash = false;
 		spriteFrame = 0;
 
-		colliding = false;
+		invisible = false;
 	}
 };

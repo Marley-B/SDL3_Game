@@ -66,7 +66,7 @@ int main(int argc, char *agrc[])
 				event.type == UserEvents::STAMINA_DEPLETED || event.type == UserEvents::STAMINA_RESTORED) {
 				for (auto& layer : gs.layers) {
 					for (GameObject& obj : layer) {
-						if (obj.dynamic) {
+						if (obj.dynamic && obj.type == ObjectType::player) {
 							gs.currentStatePlayer->handleEvent(event, res, obj, gs);
 						}
 					}
@@ -123,7 +123,9 @@ int main(int argc, char *agrc[])
 		// draw all objects
 		for (auto& layer : gs.layers) {
 			for (GameObject& obj : layer) {
-				drawObject(state, gs, obj, TILE_SIZE, TILE_SIZE, deltaTime);
+				if (!obj.invisible) {
+					drawObject(state, gs, obj, TILE_SIZE, TILE_SIZE, deltaTime);
+				}
 			}    
 		}
 
@@ -158,17 +160,22 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	}
 	
 	// update the player according to their current state
-	gs.currentStatePlayer->update(obj, deltaTime);
+	if (obj.type == ObjectType::player) {
+		gs.currentStatePlayer->update(obj, deltaTime);
 
-	if (obj.data.player.invincible) {
-		if (obj.data.player.damagedTimer.step(deltaTime)) {
-			obj.data.player.invincible = false;
+		if (obj.data.player.invincible) {
+			if (obj.data.player.damagedTimer.step(deltaTime)) {
+				obj.data.player.invincible = false;
+			}
 		}
-	}
+		else { // decrese stamina with time
+			//obj.data.player.staminaPoints += -0.1 * deltaTime;
+		}
 
-	if (obj.data.player.staminaPoints <= 0) {
-		SDL_Event event{ UserEvents::STAMINA_DEPLETED };
-		SDL_PushEvent(&event);
+		if (obj.data.player.staminaPoints <= 0) {
+			SDL_Event event{ UserEvents::STAMINA_DEPLETED };
+			SDL_PushEvent(&event);
+		}
 	}
 
 	// handle collision detection 
@@ -270,12 +277,29 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 				objA.shouldFlash = true;
 				break;
 			}
-			//case ObjectType::coin{}  FUTURE
-			//case ObjectType::juice{}
+			case ObjectType::coin:{
+				objA.data.player.collectedCoins += objB.data.pickUp.value;
+				// despawn the coin
+				objB.invisible = true;
+				objB.collider = { 0, 0, 0, 0 };
+				break;
+			}
+			case ObjectType::juice:{
+				if (objA.data.player.staminaPoints <= 0) {
+					objA.data.player.staminaPoints = objB.data.pickUp.value;
+				}
+				else {
+					objA.data.player.staminaPoints = std::min(objA.data.player.staminaPoints + objB.data.pickUp.value, (float)objA.data.player.maxStamina);
+				}
+				objB.invisible = true;
+				objB.collider = { 0, 0, 0, 0 };
+				SDL_Event event{ UserEvents::STAMINA_RESTORED };
+				SDL_PushEvent(&event);
+				break;
+			}
 		}
 	}
 }
-
 
 void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 	struct LayerVisitor {
@@ -385,7 +409,7 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					gs.playerLayer = gs.layers.size();
 				}
 				else if (obj.type == "Coin") {
-					GameObject coin = createObject(1, 1, res.texSlide, ObjectType::coin);
+					GameObject coin = createObject(1, 1, res.texIdle, ObjectType::coin);
 					coin.data.pickUp = PickUpData();
 					coin.data.pickUp.value = 1;
 					coin.position = objPos;
@@ -399,12 +423,12 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					newLayer.push_back(coin);
 				}
 				else if (obj.type == "Juice") {
-					GameObject juice = createObject(1, 1, res.texIdle, ObjectType::juice);
+					GameObject juice = createObject(1, 1, res.texRun, ObjectType::juice);
 					juice.data.pickUp = PickUpData();
 					juice.data.pickUp.value = 50;
 					juice.position = objPos;
 					juice.animations = res.playerAnims; // REMOVE for item anim
-					juice.currentAnimation = res.ANIM_PLAYER_IDLE;
+					juice.currentAnimation = res.ANIM_PLAYER_RUN;
 					juice.dynamic = true;
 					juice.collider = {
 						.x = 11, .y = 6,
