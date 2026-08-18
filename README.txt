@@ -7,6 +7,7 @@ Resources that greatly helped:
 ----------------------------------------
 	https://www.youtube.com/watch?v=MTOiH59XIaE - Parsing Tiled Levels for Your SDL3 Game Engine (TinyXML2, C++)
 	https://www.youtube.com/watch?v=Wu2g-N5Z78Y - How to Make a 2D Game in C++ and SDL3
+	https://www.youtube.com/watch?v=v9sbmmyRxHE - Code Collisions Detection for Your C++ Game
 	https://lazyfoo.net/tutorials/SDL3/19-state-machines/index.php - Manage your game states with state machines
 	https://www.studyplan.dev/sdl3/sdl3-user-events - Creating Custom Events
 

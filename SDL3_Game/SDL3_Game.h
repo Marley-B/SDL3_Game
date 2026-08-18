@@ -22,7 +22,7 @@
 bool initialize(SDLState& state);
 void cleanup(SDLState& state);
 void createTiles(const SDLState& state, GameState& gs, Resources& res);
-void drawParalaxBackground(SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime);
+void drawParalaxBackground(GameState* gs, SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime);
 void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float width, float hight, float deltaTime);
 void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);
 void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime);

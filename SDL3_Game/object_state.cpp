@@ -191,7 +191,6 @@ void PlayerNoStamina::handleEvent(SDL_Event& e, Resources& res, GameObject& obj,
             if (obj.directionH == 1) obj.directionH = 0;
             break;
         }
-
     }
 
     if (e.type == UserEvents::STAMINA_RESTORED) {

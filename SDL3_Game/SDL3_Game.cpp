@@ -97,7 +97,6 @@ int main(int argc, char *agrc[])
 					break;
 				}
 			}
-
 		}
 
 		// update all objects
@@ -110,15 +109,15 @@ int main(int argc, char *agrc[])
 		}
 
 		// calculate viewport position 
-		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2  -50 ;
+		gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2  + 30 ;
 		gs.mapViewport.y = (gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2;
 
 
 		// draw background images
 		SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
-		drawParalaxBackground(state.renderer, res.texBg4, gs.player().velocity.x, gs.bg4Scroll, 0.075f, deltaTime);
-		drawParalaxBackground(state.renderer, res.texBg3, gs.player().velocity.x, gs.bg3Scroll, 0.15f, deltaTime);
-		drawParalaxBackground(state.renderer, res.texBg2, gs.player().velocity.x, gs.bg2Scroll, 0.3f, deltaTime);
+		drawParalaxBackground(&gs, state.renderer, res.texBg4, gs.player().velocity.x, gs.bg4Scroll, 0.075f, deltaTime);
+		drawParalaxBackground(&gs, state.renderer, res.texBg3, gs.player().velocity.x, gs.bg3Scroll, 0.15f, deltaTime);
+		drawParalaxBackground(&gs, state.renderer, res.texBg2, gs.player().velocity.x, gs.bg2Scroll, 0.3f, deltaTime);
 
 		// draw all objects
 		for (auto& layer : gs.layers) {
@@ -133,9 +132,9 @@ int main(int argc, char *agrc[])
 			// Enhanced debug display with position and viewport info
 			SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
 			SDL_RenderDebugText(state.renderer, 5, 5,
-				std::format("S: {}, A: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
+				std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
 					typeid(*gs.currentStatePlayer).name(),
-					gs.player().currentAnimation,
+					gs.player().data.player.collectedCoins,
 					gs.player().data.player.staminaPoints,
 					gs.player().position.x,
 					gs.player().position.y,
@@ -158,7 +157,7 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	if (obj.currentAnimation != -1) {
 		obj.animations[obj.currentAnimation].step(deltaTime);
 	}
-	
+
 	// update the player according to their current state
 	if (obj.type == ObjectType::player) {
 		gs.currentStatePlayer->update(obj, deltaTime);
@@ -179,31 +178,10 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 	}
 
 	// handle collision detection 
-	bool foundGround = false;
 	for (auto& layer : gs.layers) {
 		for (GameObject& objB : layer) {
 			if (&obj != &objB) {
 				checkCollision(state, gs, res, obj, objB, deltaTime);
-
-				// Maybe to detect bottom to activate death? FUTURE
-				//if (objB.type == ObjectType::level && objB.collider.w != 0
-				//	&& objB.collider.h != 0) {
-				//	// grounded sensor
-				//	SDL_FRect sensor{
-				//		.x = obj.position.x + obj.collider.x,
-				//		.y = obj.position.y + obj.collider.y + obj.collider.h,
-				//		.w = obj.collider.w, .h = 1
-				//	};
-				//	SDL_FRect recB{
-				//		.x = objB.position.x + objB.collider.x,
-				//		.y = objB.position.y + objB.collider.y,
-				//		.w = objB.collider.w, .h = objB.collider.h
-				//	};
-				//	SDL_FRect recC{ 0 };
-				//	if (SDL_GetRectIntersectionFloat(&sensor, &recB, &recC)) {
-				//		foundGround = true;
-				//	}
-				//}
 			}
 		}
 	}
@@ -266,39 +244,59 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 	if (objA.type == ObjectType::player) {
 		// object we are coliding with
 		switch (objB.type) {
-			case ObjectType::level: {
-				if (!objA.data.player.invincible) {
-					objA.data.player.staminaPoints -= 10; // depleet stamina on hit
-					objA.data.player.invincible = true;
-				}
-				glm::vec2 prevVel = objA.velocity;
-				genericResponse();
-				objA.velocity = -prevVel; // bounce of wall
-				objA.shouldFlash = true;
-				break;
+		case ObjectType::level: {
+			if (!objA.data.player.invincible) {
+				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				objA.data.player.invincible = true;
 			}
-			case ObjectType::coin:{
-				objA.data.player.collectedCoins += objB.data.pickUp.value;
-				// despawn the coin
-				objB.invisible = true;
-				objB.collider = { 0, 0, 0, 0 };
-				break;
+			glm::vec2 prevVel = objA.velocity;
+			genericResponse();
+			objA.velocity = -prevVel; // bounce of wall
+			objA.shouldFlash = true;
+			break;
+		}
+		case ObjectType::coin: {
+			objA.data.player.collectedCoins += objB.data.pickUp.value;
+			// despawn the coin
+			objB.invisible = true;
+			objB.collider = { 0, 0, 0, 0 };
+			break;
+		}
+		case ObjectType::juice: {
+			if (objA.data.player.staminaPoints <= 0) {
+				objA.data.player.staminaPoints = objB.data.pickUp.value;
 			}
-			case ObjectType::juice:{
-				if (objA.data.player.staminaPoints <= 0) {
-					objA.data.player.staminaPoints = objB.data.pickUp.value;
-				}
-				else {
-					objA.data.player.staminaPoints = std::min(objA.data.player.staminaPoints + objB.data.pickUp.value, (float)objA.data.player.maxStamina);
-				}
-				objB.invisible = true;
-				objB.collider = { 0, 0, 0, 0 };
-				SDL_Event event{ UserEvents::STAMINA_RESTORED };
-				SDL_PushEvent(&event);
-				break;
+			else {
+				objA.data.player.staminaPoints = std::min(objA.data.player.staminaPoints + objB.data.pickUp.value, (float)objA.data.player.maxStamina);
 			}
+			objB.invisible = true;
+			objB.collider = { 0, 0, 0, 0 };
+			SDL_Event event{ UserEvents::STAMINA_RESTORED };
+			SDL_PushEvent(&event);
+			break;
+		}
 		}
 	}
+}
+
+
+bool intersectAABB(const SDL_FRect& a, const SDL_FRect& b, glm::vec2& overlap){
+	const float minXA = a.x;
+	const float maxXA = a.x + a.w;
+	const float minYA = a.y;
+	const float maxYA = a.y + a.h;
+	const float minXB = b.x;
+	const float maxXB = b.x + b.w;
+	const float minYB = b.y;
+	const float maxYB = b.y + b.h;
+
+	// ceck for an intersection on both axis at the same time
+	if ((minXA < maxXB && maxXA > minXB) && (minYA < maxYB && maxYA > minYB)){
+		overlap.x = std::min(maxXA - minXB, maxXB - minXA);
+		overlap.y = std::min(maxYA - minYB, maxYB - minYA);
+		return true;
+	}
+	return false;
 }
 
 void createTiles(const SDLState& state, GameState& gs, Resources& res) {
@@ -394,9 +392,9 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					player.data.player.collectedCoins = 0;
 					player.animations = res.playerAnims;
 					player.currentAnimation = res.ANIM_PLAYER_IDLE;
-					player.acceleration = glm::vec2(200, 200);
-					player.maxSpeedX = 130;
-					player.maxSpeedY = 130;
+					player.acceleration = glm::vec2(130, 130);
+					player.maxSpeedX = 100;
+					player.maxSpeedY = 100;
 					player.directionH = 0;
 					player.directionV = 0;
 					player.dynamic = true;
@@ -448,14 +446,16 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 	
 }
 
-void drawParalaxBackground(SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime) {
+void drawParalaxBackground(GameState* gs ,SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime) {
 	scrollPos -= xVelocity * scrollFactor * deltaTime;
 	if (scrollPos <= -texture->w) {
 		scrollPos = 0;
 	}
+	float yPos = - gs->mapViewport.y + 330;
 
 	SDL_FRect dst{
-		.x = scrollPos, .y = 0,
+		.x = scrollPos, 
+		.y = yPos,
 		.w = texture->w * 2.0f, //we get two copies in succesion
 		.h = static_cast<float>(texture->h)
 	};
