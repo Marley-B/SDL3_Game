@@ -10,9 +10,9 @@
 //	// idle, flying,no stamina, hit, dead
 //};
 //
-enum class PickUpState { 
-	idle, colliding, inactive
-};
+//enum class PickUpState { 
+//	idle, colliding, inactive
+//};
 
 /*
 enum class BulletState {
@@ -43,9 +43,10 @@ struct PlayerData {
 struct LevelData {};
 
 struct PickUpData {
-	PickUpState state;
+	//PickUpState state;
 	float value;
-	PickUpData() : state(PickUpState::idle) {
+	//PickUpData() : state(PickUpState::idle)
+	PickUpData() {
 		value = 0;
 	}
 };
@@ -78,7 +79,6 @@ union ObjectData {
 
 enum class ObjectType {
 	player, level, coin, juice,
-	//enemy, bullet
 };
 
 struct GameObject {

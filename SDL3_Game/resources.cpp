@@ -52,6 +52,9 @@ void Resources::load(SDLState& state) {
 	texBg2 = loadTexture(state.renderer, "data/bg/bg_layer2.png");
 	texBg3 = loadTexture(state.renderer, "data/bg/bg_layer3.png");
 	texBg4 = loadTexture(state.renderer, "data/bg/bg_layer4.png");
+	texButtHov = loadTexture(state.renderer, "data/button_hovering.png");
+	texButtDown = loadTexture(state.renderer, "data/button_down.png");
+	texButt = loadTexture(state.renderer, "data/button_idle.png");
 
 	audioShoot = loadAudio(state.mixer, "data/audio/shoot.wav");
 	audioShootHit = loadAudio(state.mixer, "data/audio/wall_hit.wav");

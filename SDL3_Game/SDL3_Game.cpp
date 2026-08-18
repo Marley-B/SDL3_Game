@@ -34,7 +34,7 @@ int main(int argc, char *agrc[])
 	state.width = 1600;
 	state.height = 900;
 	state.logW = 640;
-	state.logH = 300;
+	state.logH = 360;
 
 	if (!initialize(state)) {
 		return 1;
@@ -51,6 +51,9 @@ int main(int argc, char *agrc[])
 
 	// MIX_SetTrackGain(res.musicMain, 0.5f);
 	// MIX_PlayTrack(res.musicMain, -1);
+
+	Button button = Button(res);
+
 
 	// start the game loop
 	bool running = true;
@@ -71,6 +74,9 @@ int main(int argc, char *agrc[])
 						}
 					}
 				}
+			}
+			if (event.type == SDL_EVENT_MOUSE_MOTION || event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
+				button.handleEvent(&event, res);
 			}
 
 			switch (event.type) {
@@ -127,6 +133,8 @@ int main(int argc, char *agrc[])
 				}
 			}    
 		}
+
+		button.render(&state);
 
 		if (gs.debugMode == true) {
 			// Enhanced debug display with position and viewport info
@@ -244,59 +252,39 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 	if (objA.type == ObjectType::player) {
 		// object we are coliding with
 		switch (objB.type) {
-		case ObjectType::level: {
-			if (!objA.data.player.invincible) {
-				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
-				objA.data.player.invincible = true;
+			case ObjectType::level: {
+				if (!objA.data.player.invincible) {
+					objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+					objA.data.player.invincible = true;
+				}
+				glm::vec2 prevVel = objA.velocity;
+				genericResponse();
+				objA.velocity = -prevVel; // bounce of wall
+				objA.shouldFlash = true;
+				break;
 			}
-			glm::vec2 prevVel = objA.velocity;
-			genericResponse();
-			objA.velocity = -prevVel; // bounce of wall
-			objA.shouldFlash = true;
-			break;
-		}
-		case ObjectType::coin: {
-			objA.data.player.collectedCoins += objB.data.pickUp.value;
-			// despawn the coin
-			objB.invisible = true;
-			objB.collider = { 0, 0, 0, 0 };
-			break;
-		}
-		case ObjectType::juice: {
-			if (objA.data.player.staminaPoints <= 0) {
-				objA.data.player.staminaPoints = objB.data.pickUp.value;
+			case ObjectType::coin: {
+				objA.data.player.collectedCoins += objB.data.pickUp.value;
+				// despawn the coin
+				objB.invisible = true;
+				objB.collider = { 0, 0, 0, 0 };
+				break;
 			}
-			else {
-				objA.data.player.staminaPoints = std::min(objA.data.player.staminaPoints + objB.data.pickUp.value, (float)objA.data.player.maxStamina);
+			case ObjectType::juice: {
+				if (objA.data.player.staminaPoints <= 0) {
+					objA.data.player.staminaPoints = objB.data.pickUp.value;
+				}
+				else {
+					objA.data.player.staminaPoints = std::min(objA.data.player.staminaPoints + objB.data.pickUp.value, (float)objA.data.player.maxStamina);
+				}
+				objB.invisible = true;
+				objB.collider = { 0, 0, 0, 0 };
+				SDL_Event event{ UserEvents::STAMINA_RESTORED };
+				SDL_PushEvent(&event);
+				break;
 			}
-			objB.invisible = true;
-			objB.collider = { 0, 0, 0, 0 };
-			SDL_Event event{ UserEvents::STAMINA_RESTORED };
-			SDL_PushEvent(&event);
-			break;
-		}
 		}
 	}
-}
-
-
-bool intersectAABB(const SDL_FRect& a, const SDL_FRect& b, glm::vec2& overlap){
-	const float minXA = a.x;
-	const float maxXA = a.x + a.w;
-	const float minYA = a.y;
-	const float maxYA = a.y + a.h;
-	const float minXB = b.x;
-	const float maxXB = b.x + b.w;
-	const float minYB = b.y;
-	const float maxYB = b.y + b.h;
-
-	// ceck for an intersection on both axis at the same time
-	if ((minXA < maxXB && maxXA > minXB) && (minYA < maxYB && maxYA > minYB)){
-		overlap.x = std::min(maxXA - minXB, maxXB - minXA);
-		overlap.y = std::min(maxYA - minYB, maxYB - minYA);
-		return true;
-	}
-	return false;
 }
 
 void createTiles(const SDLState& state, GameState& gs, Resources& res) {

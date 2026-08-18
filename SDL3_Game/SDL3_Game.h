@@ -17,6 +17,7 @@
 #include "resources.h"
 #include "object_state.h"
 #include "user_events.h"
+#include "game_status.h"
 
 
 bool initialize(SDLState& state);
