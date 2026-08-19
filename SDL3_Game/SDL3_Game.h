@@ -29,3 +29,4 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime);
 void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
 	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime);
+void initializeLevels(Resources& res);

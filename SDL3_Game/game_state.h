@@ -18,7 +18,8 @@ struct GameState {
 	//ObjectState* currentStateGame;
 	ObjectState* currentStatePlayer;
 	GameStatus* currentStateGame;
-	std::vector<GameStatus> levels;
+	GameStatus* currentLevel;
+	std::vector<Level*> Level::sLevels;
 
 	GameState(const SDLState& state);
 	GameObject& player() { return layers[playerLayer][playerIndex]; }

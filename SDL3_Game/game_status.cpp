@@ -44,10 +44,20 @@ bool LevelMenu::enter(Resources& res) {
 
 void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
     if (button1.handleEvent(&e, res)) {
-        // change state to level 1
+        gs.currentLevel = Level::get(1);
+        changeState(Level::get(1), gs.currentStateGame, res);
     }
     else if (button2.handleEvent(&e, res)) {
-        // change state to level 2
+        gs.currentLevel = Level::get(2);
+        changeState(Level::get(2), gs.currentStateGame, res);
+    }
+    else if (button3.handleEvent(&e, res)) {
+        gs.currentLevel = Level::get(3);
+        changeState(Level::get(3), gs.currentStateGame, res);
+    }
+    else if (button4.handleEvent(&e, res)) {
+        gs.currentLevel = Level::get(4);
+        changeState(Level::get(4), gs.currentStateGame, res);
     }
 }
 
@@ -63,9 +73,33 @@ void LevelMenu::render(SDLState* state) {
     button4.render(state);
 }
 
-Level::Level(Resources& res):
+Level::Level(int id, Resources& res) :
+    mLevelId{ id },
     map{res.map.get()}
 {
+}
+
+Level* Level::get(int id) {
+    // Check if level already exists
+    for (auto* level : sLevels) {
+        if (level && level->mLevelId == id) {
+            return level;
+        }
+    }
+    return nullptr;
+}
+
+bool Level::enter(Resources& res) {
+
+}
+
+void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+    if (e.type == UserEvents::PLAYER_DEATH) {
+        changeState(DeathState::get(), gs.currentStateGame, res);
+    }
+    else if (e.type == UserEvents::PLAYER_WIN) {
+        changeState(WinState::get(), gs.currentStateGame, res);
+    }
 }
 
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res) {

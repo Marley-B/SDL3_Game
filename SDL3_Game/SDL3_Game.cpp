@@ -54,7 +54,7 @@ int main(int argc, char *agrc[])
 	// MIX_PlayTrack(res.musicMain, -1);
 
 	Button button = Button(res);
-
+	initializeLevels(res);
 
 	// start the game loop
 	bool running = true;
@@ -193,6 +193,15 @@ void update(const SDLState& state, GameState& gs, Resources& res, GameObject& ob
 				checkCollision(state, gs, res, obj, objB, deltaTime);
 			}
 		}
+	}
+}
+
+void initializeLevels(Resources& res) {
+	if (Level::sLevels.empty()) {
+		Level::sLevels.push_back(new Level(1, res));
+		Level::sLevels.push_back(new Level(2, res));
+		Level::sLevels.push_back(new Level(3, res));
+		Level::sLevels.push_back(new Level(4, res));
 	}
 }
 

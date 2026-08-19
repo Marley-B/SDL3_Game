@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "tmx.h"
 #include "resources.h"
+#include "user_events.h"
 #include "game_state.h"
 
 // Forward declarations
@@ -78,32 +79,47 @@ private:
     Button button4;
 };
 
-class Death : public GameStatus {
+class Level : public GameStatus {
 public:
-    static Death* get();
+    static std::vector<Level*> sLevels;
+    Level(int levelId, Resources& res);
+    static Level* get(int id);
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
     void update() override;
     void render(SDLState* state) override;
 private:
-    static Death sDeath;
+    int mLevelId;
+    tmx::Map* map = nullptr;
+};
+
+class DeathState : public GameStatus {
+public:
+    static DeathState* get();
+    bool enter(Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    void update() override;
+    void render(SDLState* state) override;
+private:
+    static DeathState sDeath;
     SDL_Texture* mBgTexture;
     Button button1;
     Button button2;
-    Death();
+    DeathState();
 };
 
-class Level : public GameStatus {
+class WinState : public GameStatus {
 public:
-    Level(Resources& res);
-    static Level* get();
+    static WinState* get();
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
     void update() override;
     void render(SDLState* state) override;
 private:
-    static Level sLevel;
-    tmx::Map* map = nullptr;
+    static WinState sWinState;
+    SDL_Texture* mBgTexture;
+    Button button;
+    WinState();
 };
 
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res);
