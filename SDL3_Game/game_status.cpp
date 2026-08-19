@@ -102,6 +102,63 @@ void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
     }
 }
 
+DeathState* DeathState::get() {
+    return &sDeathState;
+}
+
+bool DeathState::enter(Resources& res) {
+    mBgTexture = res.texGameOverScreen;
+    button1 = Button(res);
+    button1.setPosition(20, 150);
+    button2 = Button(res);
+    button2.setPosition(100, 150);
+    return true;
+}
+
+void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+    if (button1.handleEvent(&e, res)) {
+        changeState(gs.currentLevel, gs.currentStateGame, res);
+    }
+    else if (button2.handleEvent(&e, res)) {
+        changeState(LevelMenu::get(), gs.currentStateGame, res);
+    }
+}
+
+void DeathState::update() {
+
+}
+
+void DeathState::render(SDLState* state) {
+    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
+    button1.render(state);
+    button2.render(state);
+}
+
+WinState* WinState::get() {
+    return &sWinState;
+}
+
+bool WinState::enter(Resources& res) {
+    mBgTexture = res.texWinScreen;
+    button = Button(res);
+    button.setPosition(150, 150);
+    return true;
+}
+
+void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+    if (button.handleEvent(&e, res)) {
+        changeState(LevelMenu::get(), gs.currentStateGame, res);
+    }
+}
+
+void WinState::update() {
+
+}
+
+void WinState::render(SDLState* state) {
+    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
+    button.render(state);
+}
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res) {
     if (newState != nullptr && newState != currentState) {
         currentState = newState;

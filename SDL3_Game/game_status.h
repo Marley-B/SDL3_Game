@@ -79,20 +79,6 @@ private:
     Button button4;
 };
 
-class Level : public GameStatus {
-public:
-    static std::vector<Level*> sLevels;
-    Level(int levelId, Resources& res);
-    static Level* get(int id);
-    bool enter(Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
-    void render(SDLState* state) override;
-private:
-    int mLevelId;
-    tmx::Map* map = nullptr;
-};
-
 class DeathState : public GameStatus {
 public:
     static DeathState* get();
@@ -101,7 +87,7 @@ public:
     void update() override;
     void render(SDLState* state) override;
 private:
-    static DeathState sDeath;
+    static DeathState sDeathState;
     SDL_Texture* mBgTexture;
     Button button1;
     Button button2;

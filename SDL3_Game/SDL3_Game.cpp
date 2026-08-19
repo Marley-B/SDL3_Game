@@ -30,7 +30,6 @@ GameState::GameState(const SDLState& state) {
 
 int main(int argc, char *agrc[])
 {
-	//cout << "Hello CMake." << endl;
 	SDLState state;
 	state.width = 1600;
 	state.height = 900;
