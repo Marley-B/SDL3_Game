@@ -1,23 +1,84 @@
 // manages the difrent game states the game can change through
 #include "game_status.h"
 
-// static IntroState* get();
-//IntroState* IntroState::get()
-//{
-//    //Get static instance
-//    return &sIntroState;
-//}
+
+IntroMenu* IntroMenu::get(){
+    return &sIntroMenu;
+}
+
+bool IntroMenu::enter(Resources& res) {
+    mBgTexture = res.texIntroScreen;
+    return true;
+}
+
+void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+    if ((e.type == SDL_EVENT_KEY_DOWN) && ((e.key.key == SDLK_KP_ENTER) || (e.key.key == SDLK_RETURN))) {
+        changeState(LevelMenu::get(), gs.currentStateGame , res);
+    }
+}
+
+void IntroMenu::update() {
+
+}
+
+void IntroMenu::render(SDLState* state) {
+    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
+}
+
+LevelMenu* LevelMenu::get() {
+    return &sLevelMenu;
+}
+
+bool LevelMenu::enter(Resources& res) {
+    mBgTexture = res.texLevelMenuScreen;
+    button1 = Button(res);
+    button1.setPosition(20, 150);
+    button2 = Button(res);
+    button2.setPosition(100, 150);
+    button3 = Button(res);
+    button3.setPosition(200, 150);
+    button4 = Button(res);
+    button4.setPosition(300, 150);
+    return true;
+}
+
+void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+    if (button1.handleEvent(&e, res)) {
+        // change state to level 1
+    }
+    else if (button2.handleEvent(&e, res)) {
+        // change state to level 2
+    }
+}
+
+void LevelMenu::update() {
+
+}
+
+void LevelMenu::render(SDLState* state) {
+    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
+    button1.render(state);
+    button2.render(state);
+    button3.render(state);
+    button4.render(state);
+}
+
+Level::Level(Resources& res):
+    map{res.map.get()}
+{
+}
 
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res) {
     if (newState != nullptr && newState != currentState) {
         currentState = newState;
-        currentState->enter();
+        currentState->enter(res);
         return true;
     }
     return false;
 }
 
 // button related functions
+
 Button::Button(Resources& res): 
     mPosition{ 0.f, 0.f }, 
     mCurrentTexture{ res.texButt }
@@ -34,7 +95,7 @@ void Button::setDimensions(float w, float h) {
     kButtonHeight = h;
 }
 
-void Button::handleEvent(SDL_Event* e, Resources& res){
+bool Button::handleEvent(SDL_Event* e, Resources& res){
     //If mouse event happened
     if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP)
     {
@@ -70,6 +131,7 @@ void Button::handleEvent(SDL_Event* e, Resources& res){
 
                 case SDL_EVENT_MOUSE_BUTTON_DOWN:
                     mCurrentTexture = res.texButtDown;
+                    return true; // return true if the mouse is pressed
                     break;
 
                 case SDL_EVENT_MOUSE_BUTTON_UP:
@@ -78,6 +140,7 @@ void Button::handleEvent(SDL_Event* e, Resources& res){
             }
         }
     }
+    return false;
 }
 
 void Button::render(SDLState* state) {

@@ -5,76 +5,13 @@
 #include <glm/glm.hpp>
 #include "tmx.h"
 #include "resources.h"
+#include "game_state.h"
 
 // Forward declarations
 class Resources;
 class GameObject;
 struct GameState;
 class ObjectState;
-
-class GameStatus{
-public:
-    //State transitions
-    virtual bool enter() = 0;
-    //virtual bool exit() = 0;
-
-    //Main loop functions
-    virtual void handleEvent(SDL_Event& e) = 0;
-    virtual void update() = 0;
-    virtual void render() = 0;
-
-    //Make sure to call child destructors
-    virtual ~GameStatus() = default;
-};
-
-//class IntroMenu : public GameStatus {
-//public:
-//    static IntroMenu* get();
-//    bool enter() override; 
-//    void handleEvent(SDL_Event& e) override;
-//    void update() override;
-//    void render() override;
-//private:
-//    static IntroMenu sIntroMenu;
-//    IntroMenu();
-//};
-//
-//class LevelMenu : public GameStatus {
-//public:
-//    static LevelMenu* get();
-//    bool enter() override;
-//    void handleEvent(SDL_Event& e) override;
-//    void update() override;
-//    void render() override;
-//private:
-//    static LevelMenu sLevelMenu;
-//    LevelMenu() = default;
-//};
-//
-//class Level : public GameStatus {
-//public:
-//    static Level* get();
-//    bool enter() override;
-//    void handleEvent(SDL_Event& e) override;
-//    void update() override;
-//    void render() override;
-//private:
-//    static Level sLevel;
-//    LevelMenu() = default;
-//    tmx::Map map;
-//};
-//
-//class Death : public GameStatus {
-//public:
-//    static Death* get();
-//    bool enter() override;
-//    void handleEvent(SDL_Event& e) override;
-//    void update() override;
-//    void render() override;
-//private:
-//    static Death sDeath;
-//    Death() = default;
-//};
 
 class Button {
 public:
@@ -84,27 +21,89 @@ public:
 
     //Initializes internal variables
     Button(Resources& res);
-    //Sets top left position
-    void setPosition(float x, float y);
+    void setPosition(float x, float y); //Sets top left position
     void setDimensions(float w, float h);
-    //Handles mouse event
-    void handleEvent(SDL_Event* e, Resources& res);
-    //Shows button sprite
-    void render(SDLState* state);
+    bool handleEvent(SDL_Event* e, Resources& res); //Handles mouse event
+    void render(SDLState* state); //Shows button sprite
 
 private:
-    enum class eButtonSprite
-    {
-        MouseOut = 0,
-        MouseOverMotion = 1,
-        MouseDown = 2,
-        MouseUp = 3
-    };
-
     //Top left position
     SDL_FPoint mPosition;
     //Currently used sprite
     SDL_Texture* mCurrentTexture;
+};
+
+class GameStatus{
+public:
+    //State transitions
+    virtual bool enter(Resources& res) = 0;
+    //virtual bool exit() = 0;
+
+    //Main loop functions
+    virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res) = 0;
+    virtual void update() = 0;
+    virtual void render(SDLState* state) = 0;
+
+    //Make sure to call child destructors
+    virtual ~GameStatus() = default;
+};
+
+class IntroMenu : public GameStatus {
+public:
+    static IntroMenu* get();
+    bool enter(Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    void update() override;
+    void render(SDLState* state) override;
+private:
+    static IntroMenu sIntroMenu;
+    IntroMenu();
+    SDL_Texture* mBgTexture;
+};
+
+class LevelMenu : public GameStatus {
+public:
+    static LevelMenu* get();
+    bool enter(Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    void update() override;
+    void render(SDLState* state) override;
+private:
+    static LevelMenu sLevelMenu;
+    LevelMenu();
+    SDL_Texture* mBgTexture;
+    Button button1;
+    Button button2;
+    Button button3;
+    Button button4;
+};
+
+class Death : public GameStatus {
+public:
+    static Death* get();
+    bool enter(Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    void update() override;
+    void render(SDLState* state) override;
+private:
+    static Death sDeath;
+    SDL_Texture* mBgTexture;
+    Button button1;
+    Button button2;
+    Death();
+};
+
+class Level : public GameStatus {
+public:
+    Level(Resources& res);
+    static Level* get();
+    bool enter(Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    void update() override;
+    void render(SDLState* state) override;
+private:
+    static Level sLevel;
+    tmx::Map* map = nullptr;
 };
 
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res);

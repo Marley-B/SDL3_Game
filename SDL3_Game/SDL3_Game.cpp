@@ -24,6 +24,7 @@ GameState::GameState(const SDLState& state) {
 	bg2Scroll = bg3Scroll = bg4Scroll = 0;
 	debugMode = false;
 	currentStatePlayer = PlayerIdle::get();
+	currentStateGame = IntroMenu::get();
 }
 
 

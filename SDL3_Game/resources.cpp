@@ -52,6 +52,10 @@ void Resources::load(SDLState& state) {
 	texBg2 = loadTexture(state.renderer, "data/bg/bg_layer2.png");
 	texBg3 = loadTexture(state.renderer, "data/bg/bg_layer3.png");
 	texBg4 = loadTexture(state.renderer, "data/bg/bg_layer4.png");
+	texGameOverScreen = loadTexture(state.renderer, "data/bg/gameOverScreen.png");
+	texIntroScreen = loadTexture(state.renderer, "data/bg/introScreen.png");
+	texLevelMenuScreen = loadTexture(state.renderer, "data/bg/levelMenuScreen.png");
+	texWinScreen = loadTexture(state.renderer, "data/bg/winScreen.png");
 	texButtHov = loadTexture(state.renderer, "data/button_hovering.png");
 	texButtDown = loadTexture(state.renderer, "data/button_down.png");
 	texButt = loadTexture(state.renderer, "data/button_idle.png");

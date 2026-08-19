@@ -5,6 +5,7 @@
 
 struct SDLState;
 class ObjectState;
+class GameStatus;
 
 // general game components coordination
 struct GameState {
@@ -16,6 +17,8 @@ struct GameState {
 	bool debugMode;
 	//ObjectState* currentStateGame;
 	ObjectState* currentStatePlayer;
+	GameStatus* currentStateGame;
+	std::vector<GameStatus> levels;
 
 	GameState(const SDLState& state);
 	GameObject& player() { return layers[playerLayer][playerIndex]; }
