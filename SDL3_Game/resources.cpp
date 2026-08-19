@@ -65,17 +65,17 @@ void Resources::load(SDLState& state) {
 	audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
 	musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
 
-	map = tmx::loadMap("data/maps/smallmap.tmx");
-	if (!map)
+	map1 = tmx::loadMap("data/maps/smallmap.tmx");
+	if (!map1)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
 		return;
 	}
 	// Verify map properties
 	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
-		map->mapWidth, map->mapHeight, map->tileWidth, map->tileHeight);
+		map1->mapWidth, map1->mapHeight, map1->tileWidth, map1->tileHeight);
 
-	for (tmx::TileSet& tileSet : map->tileSets) {
+	for (tmx::TileSet& tileSet : map1->tileSets) {
 		TileSetTextures tst;
 		tst.firstGid = tileSet.firstgid;
 

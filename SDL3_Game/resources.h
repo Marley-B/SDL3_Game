@@ -32,7 +32,9 @@ struct Resources {
     MIX_Track* musicMain;
 
     std::vector<TileSetTextures> tilesetTextures;
-    std::unique_ptr<tmx::Map> map;
+    std::vector<std::unique_ptr<tmx::Map>> maps;
+    std::unique_ptr<tmx::Map> map1;
+    std::unique_ptr<tmx::Map> map2;
 
     // Method declarations
     SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& filepath);

@@ -6,6 +6,7 @@
 struct SDLState;
 class ObjectState;
 class GameStatus;
+class Level;
 
 // general game components coordination
 struct GameState {

@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <memory>
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -18,11 +20,11 @@ class ObjectState;
 class Level : public GameStatus {
 public:
     static std::vector<Level*> sLevels;
-    Level(int levelId, Resources& res);
+    Level(int levelId, std::unique_ptr<tmx::Map>& map);
     static Level* get(int id);
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
+    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState* state) override;
 private:
     int mLevelId;

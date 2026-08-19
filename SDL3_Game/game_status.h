@@ -6,6 +6,7 @@
 #include "tmx.h"
 #include "resources.h"
 #include "user_events.h"
+#include "level_state.h"
 #include "game_state.h"
 
 // Forward declarations
@@ -13,6 +14,7 @@ class Resources;
 class GameObject;
 struct GameState;
 class ObjectState;
+class Level;
 
 class Button {
 public:
@@ -42,7 +44,7 @@ public:
 
     //Main loop functions
     virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res) = 0;
-    virtual void update() = 0;
+    virtual void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
     virtual void render(SDLState* state) = 0;
 
     //Make sure to call child destructors
@@ -54,7 +56,7 @@ public:
     static IntroMenu* get();
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
+    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState* state) override;
 private:
     static IntroMenu sIntroMenu;
@@ -67,7 +69,7 @@ public:
     static LevelMenu* get();
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
+    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState* state) override;
 private:
     static LevelMenu sLevelMenu;
@@ -84,7 +86,7 @@ public:
     static DeathState* get();
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
+    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState* state) override;
 private:
     static DeathState sDeathState;
@@ -99,7 +101,7 @@ public:
     static WinState* get();
     bool enter(Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
-    void update() override;
+    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState* state) override;
 private:
     static WinState sWinState;
