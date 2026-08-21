@@ -18,15 +18,9 @@
 #include "object_state.h"
 #include "user_events.h"
 #include "game_status.h"
+#include "level_state.h"
 
 
 bool initialize(SDLState& state);
 void cleanup(SDLState& state);
-void createTiles(const SDLState& state, GameState& gs, Resources& res);
-void drawParalaxBackground(GameState* gs, SDL_Renderer* renderer, SDL_Texture* texture, float xVelocity, float& scrollPos, float scrollFactor, float deltaTime);
-void drawObject(const SDLState& state, GameState& gs, GameObject& obj, float width, float hight, float deltaTime);
-void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);
-void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameObject& a, GameObject& b, float deltaTime);
-void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
-	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime);
 void initializeLevels(Resources& res);

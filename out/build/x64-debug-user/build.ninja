@@ -137,6 +137,26 @@ build SDL3_Game\CMakeFiles\SDL3_Game.dir\resources.cpp.obj: CXX_COMPILER__SDL3_G
   TARGET_PDB = SDL3_Game\SDL3_Game.pdb
   TARGET_SUPPORT_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
 
+build SDL3_Game\CMakeFiles\SDL3_Game.dir\level_state.cpp.obj: CXX_COMPILER__SDL3_Game_unscanned_Debug C$:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\level_state.cpp || cmake_object_order_depends_target_SDL3_Game
+  CONFIG = Debug
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -IC:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\ext -external:IC:\SDK\SDL3-3.4.12\include -external:IC:\SDK\SDL3_image-3.4.4\cmake\..\include -external:IC:\SDK\glm-1.0.3-VC\include -external:IC:\SDK\SDL3_mixer-3.2.4\cmake\..\include -external:W0
+  OBJECT_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+  OBJECT_FILE_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+  TARGET_COMPILE_PDB = SDL3_Game\CMakeFiles\SDL3_Game.dir\
+  TARGET_PDB = SDL3_Game\SDL3_Game.pdb
+  TARGET_SUPPORT_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+
+build SDL3_Game\CMakeFiles\SDL3_Game.dir\game_state.cpp.obj: CXX_COMPILER__SDL3_Game_unscanned_Debug C$:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\game_state.cpp || cmake_object_order_depends_target_SDL3_Game
+  CONFIG = Debug
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -IC:\01_Filehub\00_MeE\03_Games\SDL3_Game\SDL3_Game\ext -external:IC:\SDK\SDL3-3.4.12\include -external:IC:\SDK\SDL3_image-3.4.4\cmake\..\include -external:IC:\SDK\glm-1.0.3-VC\include -external:IC:\SDK\SDL3_mixer-3.2.4\cmake\..\include -external:W0
+  OBJECT_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+  OBJECT_FILE_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+  TARGET_COMPILE_PDB = SDL3_Game\CMakeFiles\SDL3_Game.dir\
+  TARGET_PDB = SDL3_Game\SDL3_Game.pdb
+  TARGET_SUPPORT_DIR = SDL3_Game\CMakeFiles\SDL3_Game.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SDL3_Game
@@ -145,7 +165,7 @@ build SDL3_Game\CMakeFiles\SDL3_Game.dir\resources.cpp.obj: CXX_COMPILER__SDL3_G
 #############################################
 # Link the executable SDL3_Game\SDL3_Game.exe
 
-build SDL3_Game\SDL3_Game.exe: CXX_EXECUTABLE_LINKER__SDL3_Game_Debug SDL3_Game\CMakeFiles\SDL3_Game.dir\SDL3_Game.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\tmx.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\ext\tinyxml2\tinyxml2.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\object_state.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\game_status.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\resources.cpp.obj | C$:\SDK\SDL3-3.4.12\lib\x64\SDL3.lib C$:\SDK\SDL3_image-3.4.4\cmake\..\lib\x64\SDL3_image.lib C$:\SDK\glm-1.0.3-VC\lib\glm.lib C$:\SDK\SDL3_mixer-3.2.4\cmake\..\lib\x64\SDL3_mixer.lib C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\manifest\segmentheap.manifest
+build SDL3_Game\SDL3_Game.exe: CXX_EXECUTABLE_LINKER__SDL3_Game_Debug SDL3_Game\CMakeFiles\SDL3_Game.dir\SDL3_Game.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\tmx.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\ext\tinyxml2\tinyxml2.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\object_state.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\game_status.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\resources.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\level_state.cpp.obj SDL3_Game\CMakeFiles\SDL3_Game.dir\game_state.cpp.obj | C$:\SDK\SDL3-3.4.12\lib\x64\SDL3.lib C$:\SDK\SDL3_image-3.4.4\cmake\..\lib\x64\SDL3_image.lib C$:\SDK\glm-1.0.3-VC\lib\glm.lib C$:\SDK\SDL3_mixer-3.2.4\cmake\..\lib\x64\SDL3_mixer.lib C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\manifest\segmentheap.manifest
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console

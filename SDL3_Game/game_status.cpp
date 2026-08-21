@@ -1,139 +1,136 @@
 // manages the difrent game states the game can change through
 #include "game_status.h"
+#include "level_state.h" 
 
+IntroMenu IntroMenu::sIntroMenu;
+LevelMenu LevelMenu::sLevelMenu;
+DeathState DeathState::sDeathState;
+WinState WinState::sWinState;
 
 IntroMenu* IntroMenu::get(){
     return &sIntroMenu;
 }
 
-bool IntroMenu::enter(Resources& res) {
+bool IntroMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texIntroScreen;
     return true;
 }
 
-void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
     if ((e.type == SDL_EVENT_KEY_DOWN) && ((e.key.key == SDLK_KP_ENTER) || (e.key.key == SDLK_RETURN))) {
-        changeState(LevelMenu::get(), gs.currentStateGame , res);
+        changeState(LevelMenu::get(), gs.currentStateGame , res, state, gs);
     }
 }
 
-void IntroMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void IntroMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
 
-}
-
-void IntroMenu::render(SDLState* state) {
-    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
+void IntroMenu::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+    SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
 }
 
 LevelMenu* LevelMenu::get() {
     return &sLevelMenu;
 }
 
-bool LevelMenu::enter(Resources& res) {
+bool LevelMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texLevelMenuScreen;
-    button1 = Button(res);
-    button1.setPosition(20, 150);
-    button2 = Button(res);
-    button2.setPosition(100, 150);
-    button3 = Button(res);
-    button3.setPosition(200, 150);
-    button4 = Button(res);
-    button4.setPosition(300, 150);
+    button1 = new Button(res);
+    button1->setPosition(20, 150);
+    button2 = new Button(res);
+    button2->setPosition(100, 150);
+    button3 = new Button(res);
+    button3->setPosition(200, 150);
+    button4 = new Button(res);
+    button4->setPosition(300, 150);
     return true;
 }
 
-void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
-    if (button1.handleEvent(&e, res)) {
+void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+    if (button1->handleEvent(&e, res)) {
         gs.currentLevel = Level::get(1);
-        changeState(Level::get(1), gs.currentStateGame, res);
+        changeState(Level::get(1), gs.currentStateGame, res, state, gs);
     }
-    else if (button2.handleEvent(&e, res)) {
+    else if (button2->handleEvent(&e, res)) {
         gs.currentLevel = Level::get(2);
-        changeState(Level::get(2), gs.currentStateGame, res);
+        changeState(Level::get(2), gs.currentStateGame, res, state, gs);
     }
-    else if (button3.handleEvent(&e, res)) {
+    else if (button3->handleEvent(&e, res)) {
         gs.currentLevel = Level::get(3);
-        changeState(Level::get(3), gs.currentStateGame, res);
+        changeState(Level::get(3), gs.currentStateGame, res, state, gs);
     }
-    else if (button4.handleEvent(&e, res)) {
+    else if (button4->handleEvent(&e, res)) {
         gs.currentLevel = Level::get(4);
-        changeState(Level::get(4), gs.currentStateGame, res);
+        changeState(Level::get(4), gs.currentStateGame, res, state, gs);
     }
 }
 
-void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
 
-}
-
-void LevelMenu::render(SDLState* state) {
-    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
-    button1.render(state);
-    button2.render(state);
-    button3.render(state);
-    button4.render(state);
+void LevelMenu::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+    SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
+    button1->render(state);
+    button2->render(state);
+    button3->render(state);
+    button4->render(state);
 }
 
 DeathState* DeathState::get() {
     return &sDeathState;
 }
 
-bool DeathState::enter(Resources& res) {
+bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texGameOverScreen;
-    button1 = Button(res);
-    button1.setPosition(20, 150);
-    button2 = Button(res);
-    button2.setPosition(100, 150);
+    button1 = new Button(res);
+    button1->setPosition(20, 150);
+    button2 = new Button(res);
+    button2->setPosition(100, 150);
     return true;
 }
 
-void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
-    if (button1.handleEvent(&e, res)) {
-        changeState(gs.currentLevel, gs.currentStateGame, res);
+void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+    if (button1->handleEvent(&e, res)) {
+        changeState(gs.currentLevel, gs.currentStateGame, res, state, gs);
     }
-    else if (button2.handleEvent(&e, res)) {
-        changeState(LevelMenu::get(), gs.currentStateGame, res);
+    else if (button2->handleEvent(&e, res)) {
+        changeState(LevelMenu::get(), gs.currentStateGame, res, state, gs);
     }
 }
 
-void DeathState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void DeathState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
 
-}
-
-void DeathState::render(SDLState* state) {
-    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
-    button1.render(state);
-    button2.render(state);
+void DeathState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+    SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
+    button1->render(state);
+    button2->render(state);
 }
 
 WinState* WinState::get() {
     return &sWinState;
 }
 
-bool WinState::enter(Resources& res) {
+bool WinState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texWinScreen;
-    button = Button(res);
-    button.setPosition(150, 150);
+    button = new Button(res);
+    button->setPosition(150, 150);
     return true;
 }
 
-void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
-    if (button.handleEvent(&e, res)) {
-        changeState(LevelMenu::get(), gs.currentStateGame, res);
+void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+    if (button->handleEvent(&e, res)) {
+        changeState(LevelMenu::get(), gs.currentStateGame, res, state, gs);
     }
 }
 
-void WinState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void WinState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
 
+void WinState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+    SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
+    button->render(state);
 }
-
-void WinState::render(SDLState* state) {
-    SDL_RenderTexture(state->renderer, mBgTexture, nullptr, nullptr);
-    button.render(state);
-}
-bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res) {
+bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res, SDLState& state, GameState& gs) {
     if (newState != nullptr && newState != currentState) {
         currentState = newState;
-        currentState->enter(res);
+        currentState->enter(state, gs, res);
         return true;
     }
     return false;
@@ -205,12 +202,12 @@ bool Button::handleEvent(SDL_Event* e, Resources& res){
     return false;
 }
 
-void Button::render(SDLState* state) {
+void Button::render(SDLState& state) {
     SDL_FRect dst{ // Where on screen to render the sprite
         .x = mPosition.x,
         .y = mPosition.y,
-        .w = (kButtonWidth / (float)state->width) * (float)state->logW,
-        .h = (kButtonHeight / (float)state->height) * (float)state->logH 
+        .w = (kButtonWidth / (float)state.width) * (float)state.logW,
+        .h = (kButtonHeight / (float)state.height) * (float)state.logH 
     };
-    SDL_RenderTexture(state->renderer, mCurrentTexture, nullptr, &dst);
+    SDL_RenderTexture(state.renderer, mCurrentTexture, nullptr, &dst);
 }

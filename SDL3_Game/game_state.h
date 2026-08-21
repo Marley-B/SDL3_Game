@@ -16,11 +16,10 @@ struct GameState {
 	SDL_FRect mapViewport;
 	float bg2Scroll, bg3Scroll, bg4Scroll;
 	bool debugMode;
-	//ObjectState* currentStateGame;
 	ObjectState* currentStatePlayer;
 	GameStatus* currentStateGame;
-	GameStatus* currentLevel;
-	std::vector<Level*> Level::sLevels;
+	Level* currentLevel;
+	//std::vector<Level*> Level::sLevels;
 
 	GameState(const SDLState& state);
 	GameObject& player() { return layers[playerLayer][playerIndex]; }

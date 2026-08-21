@@ -1,9 +1,13 @@
 #include "level_state.h"
+#include <variant>
 
+std::vector<Level*> Level::sLevels;
 
-Level::Level(int id, std::unique_ptr<tmx::Map> map) :
-    mLevelId{ id },
-    map{ map.get() }
+const int TILE_SIZE = 32;
+
+Level::Level(int levelId, std::unique_ptr<tmx::Map>& map) :
+    mLevelId{ levelId },
+	mMap{ map.get() }
 {
 }
 
@@ -17,16 +21,22 @@ Level* Level::get(int id) {
     return nullptr;
 }
 
-bool Level::enter(Resources& res) {
-
+tmx::Map* Level::getMap() {
+	return mMap;
 }
 
-void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
+
+bool Level::enter(SDLState& state, GameState& gs, Resources& res) {
+	createTiles(state, gs, res);
+	return true;
+}
+
+void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
     if (e.type == UserEvents::PLAYER_DEATH) {
-        changeState(DeathState::get(), gs.currentStateGame, res);
+        changeState(DeathState::get(), gs.currentStateGame, res, state, gs);
     }
     else if (e.type == UserEvents::PLAYER_WIN) {
-        changeState(WinState::get(), gs.currentStateGame, res);
+        changeState(WinState::get(), gs.currentStateGame, res, state, gs);
     }
 
 	if (e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP ||
@@ -34,14 +44,14 @@ void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res) {
 		for (auto& layer : gs.layers) {
 			for (GameObject& obj : layer) {
 				if (obj.dynamic && obj.type == ObjectType::player) {
-					gs.currentStatePlayer->handleEvent(event, res, obj, gs);
+					gs.currentStatePlayer->handleEvent(e, res, obj, gs);
 				}
 			}
 		}
 	}
 }
 
-void Level::render(SDLState* state){
+void Level::render(SDLState& state, GameState& gs, Resources& res, float deltaTime){
 	// draw background images
 	SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
 	drawParalaxBackground(&gs, state.renderer, res.texBg4, gs.player().velocity.x, gs.bg4Scroll, 0.075f, deltaTime);
@@ -67,28 +77,28 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 	for (auto& layer : gs.layers) {
 		for (GameObject& obj : layer) {
 			if (obj.dynamic) { // No updating background elements
-				update(state, gs, res, obj, deltaTime);
+				objUpdate(state, gs, res, obj, deltaTime);
 			}
 		}
 	}
 
-	if (gs.debugMode == true) {
-		// Enhanced debug display with position and viewport info
-		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
-		SDL_RenderDebugText(state.renderer, 5, 5,
-			std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
-				typeid(*gs.currentStatePlayer).name(),
-				gs.player().data.player.collectedCoins,
-				gs.player().data.player.staminaPoints,
-				gs.player().position.x,
-				gs.player().position.y,
-				gs.player().directionH,
-				gs.player().directionV
-			).c_str());
-	}
+	//if (gs.debugMode == true) {
+	//	// Enhanced debug display with position and viewport info
+	//	SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
+	//	SDL_RenderDebugText(state.renderer, 5, 5,
+	//		std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
+	//			typeid(*gs.currentStatePlayer).name(),
+	//			gs.player().data.player.collectedCoins,
+	//			gs.player().data.player.staminaPoints,
+	//			gs.player().position.x,
+	//			gs.player().position.y,
+	//			gs.player().directionH,
+	//			gs.player().directionV
+	//		).c_str());
+	//}
 }
 
-void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
+void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
 	// update animation
 	if (obj.currentAnimation != -1) {
 		obj.animations[obj.currentAnimation].step(deltaTime);
@@ -216,18 +226,34 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 }
 
 void createTiles(const SDLState& state, GameState& gs, Resources& res) {
+	if (gs.currentLevel == nullptr) {
+		SDL_Log("createTiles: currentLevel is null");
+		return;
+	}
+	Level* lvl = dynamic_cast<Level*>(gs.currentLevel);
+	if (!lvl) {
+		SDL_Log("createTiles: currentLevel is not a Level");
+		return;
+	}
+	tmx::Map* map = lvl->getMap();
+	if (!map) {
+		SDL_Log("createTiles: level map is null");
+		return;
+	}
+
 	struct LayerVisitor {
 		const SDLState& state;
 		GameState& gs;
 		const Resources& res;
+		tmx::Map* map;
 
-		LayerVisitor(const SDLState& state, GameState& gs, const Resources& res) : state(state), gs(gs), res(res) {}
-
+		LayerVisitor(const SDLState& state, GameState& gs, const Resources& res) : state(state), gs(gs), res(res), map(map) {}
 		auto createObject(int r, int c, SDL_Texture* tex, ObjectType type) {
 			GameObject o;
 			o.type = type;
 			o.position = glm::vec2(
 				c * map->tileWidth,
+				//mMap->tileWidth,
 				r * map->tileHeight);
 			o.texture = tex;
 			o.collider = { .x = 0, .y = 0, .w = TILE_SIZE, .h = TILE_SIZE };

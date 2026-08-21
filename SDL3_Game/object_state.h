@@ -7,8 +7,8 @@
 #include <cmath> 
 
 // Forward declarations
-class Resources;
-class GameObject;
+struct Resources;
+struct GameObject;
 struct GameState;
 class ObjectState;
 

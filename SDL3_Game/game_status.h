@@ -6,15 +6,15 @@
 #include "tmx.h"
 #include "resources.h"
 #include "user_events.h"
-#include "level_state.h"
+#include "sdlstate.h" 
 #include "game_state.h"
 
 // Forward declarations
-class Resources;
-class GameObject;
+class Level;
+struct Resources;
+struct GameObject;
 struct GameState;
 class ObjectState;
-class Level;
 
 class Button {
 public:
@@ -27,7 +27,7 @@ public:
     void setPosition(float x, float y); //Sets top left position
     void setDimensions(float w, float h);
     bool handleEvent(SDL_Event* e, Resources& res); //Handles mouse event
-    void render(SDLState* state); //Shows button sprite
+    void render(SDLState& state); //Shows button sprite
 
 private:
     //Top left position
@@ -36,16 +36,15 @@ private:
     SDL_Texture* mCurrentTexture;
 };
 
+
 class GameStatus{
 public:
     //State transitions
-    virtual bool enter(Resources& res) = 0;
-    //virtual bool exit() = 0;
-
+    virtual bool enter(SDLState& state, GameState& gs, Resources& res) = 0;
     //Main loop functions
-    virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res) = 0;
+    virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) = 0;
     virtual void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
-    virtual void render(SDLState* state) = 0;
+    virtual void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
 
     //Make sure to call child destructors
     virtual ~GameStatus() = default;
@@ -54,60 +53,60 @@ public:
 class IntroMenu : public GameStatus {
 public:
     static IntroMenu* get();
-    bool enter(Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    bool enter(SDLState& state, GameState& gs, Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState* state) override;
+    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
     static IntroMenu sIntroMenu;
-    IntroMenu();
+    IntroMenu() = default;
     SDL_Texture* mBgTexture;
 };
 
 class LevelMenu : public GameStatus {
 public:
     static LevelMenu* get();
-    bool enter(Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    bool enter(SDLState& state, GameState& gs, Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState* state) override;
+    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
     static LevelMenu sLevelMenu;
-    LevelMenu();
+    LevelMenu() = default;
     SDL_Texture* mBgTexture;
-    Button button1;
-    Button button2;
-    Button button3;
-    Button button4;
+    Button* button1 = nullptr;
+    Button* button2 = nullptr;
+    Button* button3 = nullptr;
+    Button* button4 = nullptr;
 };
 
 class DeathState : public GameStatus {
 public:
     static DeathState* get();
-    bool enter(Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    bool enter(SDLState& state, GameState& gs, Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState* state) override;
+    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
     static DeathState sDeathState;
     SDL_Texture* mBgTexture;
-    Button button1;
-    Button button2;
-    DeathState();
+    Button* button1 = nullptr;
+    Button* button2 = nullptr;
+    DeathState() = default;
 };
 
 class WinState : public GameStatus {
 public:
     static WinState* get();
-    bool enter(Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res) override;
+    bool enter(SDLState& state, GameState& gs, Resources& res) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState* state) override;
+    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
     static WinState sWinState;
     SDL_Texture* mBgTexture;
-    Button button;
-    WinState();
+    Button* button = nullptr;
+    WinState() = default;
 };
 
-bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res);
+bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res, SDLState& state, GameState& gs);

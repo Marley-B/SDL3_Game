@@ -11,23 +11,6 @@
 
 using namespace std;
 
-const int TILE_SIZE = 32;
-
-GameState::GameState(const SDLState& state) {
-	playerLayer = -1;
-	playerIndex = -1;
-	mapViewport = SDL_FRect{
-		.x = 0, .y = 0,
-		.w = static_cast<float>(state.logW),
-		.h = static_cast<float>(state.logH)
-	};
-	bg2Scroll = bg3Scroll = bg4Scroll = 0;
-	debugMode = false;
-	currentStatePlayer = PlayerIdle::get();
-	currentStateGame = IntroMenu::get();
-}
-
-
 int main(int argc, char *agrc[])
 {
 	SDLState state;
@@ -46,7 +29,6 @@ int main(int argc, char *agrc[])
 
 	// setup game data
 	GameState gs(state);
-	createTiles(state, gs, res);
 	uint64_t prevTime = SDL_GetTicks();
 
 	// MIX_SetTrackGain(res.musicMain, 0.5f);
@@ -64,10 +46,6 @@ int main(int argc, char *agrc[])
 		SDL_Event event{ 0 };
 
 		while (SDL_PollEvent(&event)) {
-			/*if (event.type == SDL_EVENT_MOUSE_MOTION || event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-				button.handleEvent(&event, res);
-			}*/
-
 			switch (event.type) {
 				case SDL_EVENT_QUIT: {
 					running = false;
@@ -93,11 +71,11 @@ int main(int argc, char *agrc[])
 				}
 			}
 
-			gs.currentStateGame->handleEvent(event, gs, res);
+			gs.currentStateGame->handleEvent(event, gs, res, state);
 		}
 
 		gs.currentStateGame->update(state, gs, res, deltaTime);
-		gs.currentStateGame->render(&state);
+		gs.currentStateGame->render(state, gs, res, deltaTime);
 
 		// swap buffers and present
 		SDL_RenderPresent(state.renderer);
