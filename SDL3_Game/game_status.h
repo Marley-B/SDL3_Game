@@ -42,7 +42,7 @@ public:
     //State transitions
     virtual bool enter(SDLState& state, GameState& gs, Resources& res) = 0;
     //Main loop functions
-    virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) = 0;
+    virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) = 0;
     virtual void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
     virtual void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
 
@@ -54,7 +54,7 @@ class IntroMenu : public GameStatus {
 public:
     static IntroMenu* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
@@ -67,7 +67,7 @@ class LevelMenu : public GameStatus {
 public:
     static LevelMenu* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
@@ -84,7 +84,7 @@ class DeathState : public GameStatus {
 public:
     static DeathState* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:
@@ -99,7 +99,7 @@ class WinState : public GameStatus {
 public:
     static WinState* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
 private:

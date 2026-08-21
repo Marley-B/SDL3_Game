@@ -31,12 +31,14 @@ bool Level::enter(SDLState& state, GameState& gs, Resources& res) {
 	return true;
 }
 
-void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) {
     if (e.type == UserEvents::PLAYER_DEATH) {
+		exit(gs, obj);
         changeState(DeathState::get(), gs.currentStateGame, res, state, gs);
     }
     else if (e.type == UserEvents::PLAYER_WIN) {
-        changeState(WinState::get(), gs.currentStateGame, res, state, gs);
+		exit(gs, obj);
+		changeState(WinState::get(), gs.currentStateGame, res, state, gs);
     }
 
 	if (e.type == SDL_EVENT_KEY_DOWN || e.type == SDL_EVENT_KEY_UP ||
@@ -85,7 +87,16 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 	if (gs.debugMode == true) {
 		// Enhanced debug display with position and viewport info
 		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
-		SDL_RenderDebugText(state.renderer, 5, 5,
+		SDL_Log("S: %s, C: %d, St: %.1f, Pos:(%.1f,%.1f), Dir:(%d,%d)",
+			typeid(*gs.currentStatePlayer).name(),
+			gs.player().data.player.collectedCoins,
+			gs.player().data.player.staminaPoints,
+			gs.player().position.x,
+			gs.player().position.y,
+			gs.player().directionH,
+			gs.player().directionV
+		);
+		/*SDL_RenderDebugText(state.renderer, 5, 5,
 			std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
 				typeid(*gs.currentStatePlayer).name(),
 				gs.player().data.player.collectedCoins,
@@ -94,8 +105,19 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 				gs.player().position.y,
 				gs.player().directionH,
 				gs.player().directionV
-			).c_str());
+			).c_str());*/
 	}
+}
+
+void Level::exit(GameState& gs, GameObject& obj) {
+	// Clear all layers
+	gs.layers.clear();
+	// Reset player indices
+	gs.playerIndex = -1;
+	gs.playerLayer = -1;
+	obj.data.player.collectedCoins = 0;
+	obj.data.player.staminaPoints = 100;
+	SDL_Log("Cleared all level tiles and objects");
 }
 
 void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
@@ -114,11 +136,15 @@ void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject&
 			}
 		}
 		else { // decrese stamina with time
-			//obj.data.player.staminaPoints += -0.1 * deltaTime;
+			obj.data.player.staminaPoints += -0.1 * deltaTime;
 		}
 
 		if (obj.data.player.staminaPoints <= 0) {
 			SDL_Event event{ UserEvents::STAMINA_DEPLETED };
+			SDL_PushEvent(&event);
+		}
+		if (obj.data.player.staminaPoints <= -25 || obj.position.y > 570) {
+			SDL_Event event{ UserEvents::PLAYER_DEATH };
 			SDL_PushEvent(&event);
 		}
 	}

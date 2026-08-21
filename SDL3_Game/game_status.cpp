@@ -16,7 +16,7 @@ bool IntroMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     return true;
 }
 
-void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) {
     if ((e.type == SDL_EVENT_KEY_DOWN) && ((e.key.key == SDLK_KP_ENTER) || (e.key.key == SDLK_RETURN))) {
         changeState(LevelMenu::get(), gs.currentStateGame , res, state, gs);
     }
@@ -37,7 +37,7 @@ bool LevelMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     button1 = new Button(res);
     button1->setPosition(20, 150);
     button2 = new Button(res);
-    button2->setPosition(190, 150);
+    button2->setPosition(160, 150);
     button3 = new Button(res);
     button3->setPosition(310, 150);
     button4 = new Button(res);
@@ -45,7 +45,7 @@ bool LevelMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     return true;
 }
 
-void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) {
     if (button1->handleEvent(&e, res, state)) {
         gs.currentLevel = Level::get(1);
         changeState(Level::get(1), gs.currentStateGame, res, state, gs);
@@ -87,7 +87,7 @@ bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
     return true;
 }
 
-void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) {
     if (button1->handleEvent(&e, res, state)) {
         changeState(gs.currentLevel, gs.currentStateGame, res, state, gs);
     }
@@ -111,11 +111,11 @@ WinState* WinState::get() {
 bool WinState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texWinScreen;
     button = new Button(res);
-    button->setPosition(150, 150);
+    button->setPosition(400, 150);
     return true;
 }
 
-void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
+void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) {
     if (button->handleEvent(&e, res, state)) {
         changeState(LevelMenu::get(), gs.currentStateGame, res, state, gs);
     }

@@ -26,9 +26,10 @@ public:
     Level(int levelId, std::unique_ptr<tmx::Map>& map);
     static Level* get(int id);
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
-    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) override;
+    void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
     void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
     void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void exit(GameState& gs, GameObject& obj);
     tmx::Map* getMap();
 private:
     int mLevelId;

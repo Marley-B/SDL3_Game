@@ -14,11 +14,14 @@ using namespace std;
 int main(int argc, char *agrc[])
 {
 	SDLState state;
+	GameObject obj;
 	state.width = 1600;
 	state.height = 900;
 	state.logW = 640;
 	state.logH = 360;
 
+	SDL_GetWindowSize(state.window, &state.width, &state.height);
+	
 	if (!initialize(state)) {
 		return 1;
 	}
@@ -80,11 +83,13 @@ int main(int argc, char *agrc[])
 				}
 			}
 
-			gs.currentStateGame->handleEvent(event, gs, res, state);
+			gs.currentStateGame->handleEvent(event, gs, res, state, obj);  
 		}
 
 		gs.currentStateGame->update(state, gs, res, deltaTime);
 		gs.currentStateGame->render(state, gs, res, deltaTime);
+
+		SDL_Log("Window w: %d, Window h: %d", state.width, state.height);
 
 		// swap buffers and present
 		SDL_RenderPresent(state.renderer);
