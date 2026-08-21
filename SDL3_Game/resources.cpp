@@ -102,6 +102,44 @@ void Resources::load(SDLState& state) {
 		}
 		tilesetTextures.push_back(std::move(tst));
 	}
+
+	map2 = tmx::loadMap("data/maps/smallmap.tmx");
+	if (!map2)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
+		return;
+	}
+	// Verify map properties
+	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
+		map2->mapWidth, map2->mapHeight, map2->tileWidth, map2->tileHeight);
+
+	for (tmx::TileSet& tileSet : map2->tileSets) {
+		TileSetTextures tst;
+		tst.firstGid = tileSet.firstgid;
+
+		if (tileSet.tiles.size() == 1 && tileSet.count > 1) {
+			// Only ONE image file, but it contains MULTIPLE tiles
+			// Single image tileset - load the main image once
+			const std::string imagePath = "data/tiles/" +
+				std::filesystem::path(tileSet.tiles[0].image.source).filename().string();
+			SDL_Texture* mainTexture = loadTexture(state.renderer, imagePath);
+
+			// Push the same texture for each tile in the set
+			for (int i = 0; i < tileSet.count; i++) {
+				tst.textures.push_back(mainTexture);
+			}
+		}
+		else {
+			// Individual tile images
+			tst.textures.reserve(tileSet.tiles.size());
+			for (tmx::Tile& tile : tileSet.tiles) {
+				const std::string imagePath = "data/tiles/" +
+					std::filesystem::path(tile.image.source).filename().string();
+				tst.textures.push_back(loadTexture(state.renderer, imagePath));
+			}
+		}
+		tilesetTextures.push_back(std::move(tst));
+	}
 }
 
 void Resources::unload() {

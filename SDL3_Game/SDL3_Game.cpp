@@ -36,6 +36,7 @@ int main(int argc, char *agrc[])
 
 	//Button button = Button(res);
 	initializeLevels(res);
+	gs.currentStateGame->enter(state, gs, res);
 
 	// start the game loop
 	bool running = true;
@@ -57,6 +58,14 @@ int main(int argc, char *agrc[])
 					break;
 				}
 				case SDL_EVENT_KEY_DOWN: {
+					if (event.key.scancode == SDL_SCANCODE_0) {
+						SDL_Event event{ UserEvents::PLAYER_DEATH };
+						SDL_PushEvent(&event);
+					}
+					else if ((event.key.scancode == SDL_SCANCODE_9)) {
+						SDL_Event event{ UserEvents::PLAYER_WIN };
+						SDL_PushEvent(&event);
+					}
 					break;
 				}
 				case SDL_EVENT_KEY_UP: {

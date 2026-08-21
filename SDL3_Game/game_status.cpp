@@ -37,28 +37,28 @@ bool LevelMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     button1 = new Button(res);
     button1->setPosition(20, 150);
     button2 = new Button(res);
-    button2->setPosition(100, 150);
+    button2->setPosition(190, 150);
     button3 = new Button(res);
-    button3->setPosition(200, 150);
+    button3->setPosition(310, 150);
     button4 = new Button(res);
-    button4->setPosition(300, 150);
+    button4->setPosition(490, 150);
     return true;
 }
 
 void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
-    if (button1->handleEvent(&e, res)) {
+    if (button1->handleEvent(&e, res, state)) {
         gs.currentLevel = Level::get(1);
         changeState(Level::get(1), gs.currentStateGame, res, state, gs);
     }
-    else if (button2->handleEvent(&e, res)) {
+    else if (button2->handleEvent(&e, res, state)) {
         gs.currentLevel = Level::get(2);
         changeState(Level::get(2), gs.currentStateGame, res, state, gs);
     }
-    else if (button3->handleEvent(&e, res)) {
+    else if (button3->handleEvent(&e, res, state)) {
         gs.currentLevel = Level::get(3);
         changeState(Level::get(3), gs.currentStateGame, res, state, gs);
     }
-    else if (button4->handleEvent(&e, res)) {
+    else if (button4->handleEvent(&e, res, state)) {
         gs.currentLevel = Level::get(4);
         changeState(Level::get(4), gs.currentStateGame, res, state, gs);
     }
@@ -68,10 +68,10 @@ void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, flo
 
 void LevelMenu::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
-    button1->render(state);
-    button2->render(state);
-    button3->render(state);
-    button4->render(state);
+    button1->render(state, gs);
+    button2->render(state, gs);
+    button3->render(state, gs);
+    button4->render(state, gs);
 }
 
 DeathState* DeathState::get() {
@@ -88,10 +88,10 @@ bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
 }
 
 void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
-    if (button1->handleEvent(&e, res)) {
+    if (button1->handleEvent(&e, res, state)) {
         changeState(gs.currentLevel, gs.currentStateGame, res, state, gs);
     }
-    else if (button2->handleEvent(&e, res)) {
+    else if (button2->handleEvent(&e, res, state)) {
         changeState(LevelMenu::get(), gs.currentStateGame, res, state, gs);
     }
 }
@@ -100,8 +100,8 @@ void DeathState::update(const SDLState& state, GameState& gs, Resources& res, fl
 
 void DeathState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
-    button1->render(state);
-    button2->render(state);
+    button1->render(state, gs);
+    button2->render(state, gs);
 }
 
 WinState* WinState::get() {
@@ -116,7 +116,7 @@ bool WinState::enter(SDLState& state, GameState& gs, Resources& res) {
 }
 
 void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state) {
-    if (button->handleEvent(&e, res)) {
+    if (button->handleEvent(&e, res, state)) {
         changeState(LevelMenu::get(), gs.currentStateGame, res, state, gs);
     }
 }
@@ -125,7 +125,7 @@ void WinState::update(const SDLState& state, GameState& gs, Resources& res, floa
 
 void WinState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
-    button->render(state);
+    button->render(state, gs);
 }
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res, SDLState& state, GameState& gs) {
     if (newState != nullptr && newState != currentState) {
@@ -154,7 +154,7 @@ void Button::setDimensions(float w, float h) {
     kButtonHeight = h;
 }
 
-bool Button::handleEvent(SDL_Event* e, Resources& res){
+bool Button::handleEvent(SDL_Event* e, Resources& res, SDLState& state){
     //If mouse event happened
     if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP)
     {
@@ -162,19 +162,22 @@ bool Button::handleEvent(SDL_Event* e, Resources& res){
         float x = -1.f, y = -1.f;
         SDL_GetMouseState(&x, &y);
 
+        float logicalMouseX = (x * (float)state.logW) / (float)state.width;
+        float logicalMouseY = (y * (float)state.logH) / (float)state.height;
+
         //Check if mouse is in button
         bool inside = true;
 
-        if (x < mPosition.x){ // left of the button
+        if (logicalMouseX < mPosition.x){ // left of the button
             inside = false;
         }
-        else if (x > mPosition.x + kButtonWidth){ // right of the button
+        else if (logicalMouseX > mPosition.x + (kButtonWidth / (float)state.width) * (float)state.logW){ // right of the button
             inside = false;
         }
-        else if (y < mPosition.y){ // above the button
+        else if (logicalMouseY < mPosition.y){ // above the button
             inside = false;
         }
-        else if (y > mPosition.y + kButtonHeight){ //  below the button
+        else if (logicalMouseY > mPosition.y + (kButtonHeight / (float)state.height) * (float)state.logH){ //  below the button
             inside = false;
         }
         
@@ -202,7 +205,7 @@ bool Button::handleEvent(SDL_Event* e, Resources& res){
     return false;
 }
 
-void Button::render(SDLState& state) {
+void Button::render(SDLState& state, GameState &gs) {
     SDL_FRect dst{ // Where on screen to render the sprite
         .x = mPosition.x,
         .y = mPosition.y,

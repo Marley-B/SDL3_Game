@@ -82,20 +82,20 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 		}
 	}
 
-	//if (gs.debugMode == true) {
-	//	// Enhanced debug display with position and viewport info
-	//	SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
-	//	SDL_RenderDebugText(state.renderer, 5, 5,
-	//		std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
-	//			typeid(*gs.currentStatePlayer).name(),
-	//			gs.player().data.player.collectedCoins,
-	//			gs.player().data.player.staminaPoints,
-	//			gs.player().position.x,
-	//			gs.player().position.y,
-	//			gs.player().directionH,
-	//			gs.player().directionV
-	//		).c_str());
-	//}
+	if (gs.debugMode == true) {
+		// Enhanced debug display with position and viewport info
+		SDL_SetRenderDrawColor(state.renderer, 255, 255, 255, 255);
+		SDL_RenderDebugText(state.renderer, 5, 5,
+			std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
+				typeid(*gs.currentStatePlayer).name(),
+				gs.player().data.player.collectedCoins,
+				gs.player().data.player.staminaPoints,
+				gs.player().position.x,
+				gs.player().position.y,
+				gs.player().directionH,
+				gs.player().directionV
+			).c_str());
+	}
 }
 
 void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
@@ -247,13 +247,12 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 		const Resources& res;
 		tmx::Map* map;
 
-		LayerVisitor(const SDLState& state, GameState& gs, const Resources& res) : state(state), gs(gs), res(res), map(map) {}
+		LayerVisitor(const SDLState& state, GameState& gs, const Resources& res, tmx::Map* map) : state(state), gs(gs), res(res), map(map) {}
 		auto createObject(int r, int c, SDL_Texture* tex, ObjectType type) {
 			GameObject o;
 			o.type = type;
 			o.position = glm::vec2(
 				c * map->tileWidth,
-				//mMap->tileWidth,
 				r * map->tileHeight);
 			o.texture = tex;
 			o.collider = { .x = 0, .y = 0, .w = TILE_SIZE, .h = TILE_SIZE };
@@ -383,7 +382,7 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 
 	for (auto& layer : map->layers)
 	{
-		std::visit(LayerVisitor(state, gs, res), layer);
+		std::visit(LayerVisitor(state, gs, res, map), layer);
 	}
 
 }
