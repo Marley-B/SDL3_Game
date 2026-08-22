@@ -19,8 +19,8 @@ class ObjectState;
 class Button {
 public:
     //Button dimensions
-    float kButtonWidth = 300;
-    float kButtonHeight = 200;
+    float kButtonWidth = 100;
+    float kButtonHeight = 50;
 
     //Initializes internal variables
     Button(Resources& res);

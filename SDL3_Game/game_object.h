@@ -78,7 +78,7 @@ union ObjectData {
 };
 
 enum class ObjectType {
-	player, level, coin, juice,
+	player, level, coin, juice, win
 };
 
 struct GameObject {
@@ -112,7 +112,6 @@ struct GameObject {
 		dynamic = false;
 		shouldFlash = false;
 		spriteFrame = 0;
-
 		invisible = false;
 	}
 };

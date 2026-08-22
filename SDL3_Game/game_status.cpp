@@ -81,9 +81,9 @@ DeathState* DeathState::get() {
 bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texGameOverScreen;
     button1 = new Button(res);
-    button1->setPosition(20, 150);
+    button1->setPosition(40, 120);
     button2 = new Button(res);
-    button2->setPosition(100, 150);
+    button2->setPosition(40, 190);
     return true;
 }
 
@@ -162,8 +162,8 @@ bool Button::handleEvent(SDL_Event* e, Resources& res, SDLState& state){
         float x = -1.f, y = -1.f;
         SDL_GetMouseState(&x, &y);
 
-        float logicalMouseX = (x * (float)state.logW) / (float)state.width;
-        float logicalMouseY = (y * (float)state.logH) / (float)state.height;
+        float logicalMouseX = (x / (float)state.width) * (float)state.logW;
+        float logicalMouseY = (y / (float)state.height) * (float)state.logH;
 
         //Check if mouse is in button
         bool inside = true;
@@ -171,13 +171,13 @@ bool Button::handleEvent(SDL_Event* e, Resources& res, SDLState& state){
         if (logicalMouseX < mPosition.x){ // left of the button
             inside = false;
         }
-        else if (logicalMouseX > mPosition.x + (kButtonWidth / (float)state.width) * (float)state.logW){ // right of the button
+        else if (logicalMouseX > mPosition.x + kButtonWidth){ // right of the button
             inside = false;
         }
         else if (logicalMouseY < mPosition.y){ // above the button
             inside = false;
         }
-        else if (logicalMouseY > mPosition.y + (kButtonHeight / (float)state.height) * (float)state.logH){ //  below the button
+        else if (logicalMouseY > mPosition.y + kButtonHeight ){ //  below the button
             inside = false;
         }
         
@@ -209,8 +209,8 @@ void Button::render(SDLState& state, GameState &gs) {
     SDL_FRect dst{ // Where on screen to render the sprite
         .x = mPosition.x,
         .y = mPosition.y,
-        .w = (kButtonWidth / (float)state.width) * (float)state.logW,
-        .h = (kButtonHeight / (float)state.height) * (float)state.logH 
+        .w = kButtonWidth,
+        .h = kButtonHeight
     };
     SDL_RenderTexture(state.renderer, mCurrentTexture, nullptr, &dst);
 }

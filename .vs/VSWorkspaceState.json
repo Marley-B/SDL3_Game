@@ -17,8 +17,9 @@
     "",
     "\\data",
     "\\data\\bg",
+    "\\data\\maps",
     "\\SDL3_Game"
   ],
-  "SelectedNode": "\\SDL3_Game\\level_state.cpp",
+  "SelectedNode": "\\SDL3_Game\\animation.h",
   "PreviewInSolutionExplorer": false
 }

@@ -19,8 +19,6 @@ int main(int argc, char *agrc[])
 	state.height = 900;
 	state.logW = 640;
 	state.logH = 360;
-
-	SDL_GetWindowSize(state.window, &state.width, &state.height);
 	
 	if (!initialize(state)) {
 		return 1;
@@ -41,6 +39,9 @@ int main(int argc, char *agrc[])
 	initializeLevels(res);
 	gs.currentStateGame->enter(state, gs, res);
 
+	int prevWidth = state.width;
+	int prevHeight = state.height;
+
 	// start the game loop
 	bool running = true;
 	while (running) {
@@ -48,7 +49,8 @@ int main(int argc, char *agrc[])
 		float deltaTime = (nowTime - prevTime) / 1000.0f; // convert to seconds
 		if (deltaTime > 0.05f) deltaTime = 0.05f; // avoid fisics errors when the game lags
 		SDL_Event event{ 0 };
-
+		SDL_GetWindowSize(state.window, &state.width, &state.height);
+		
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 				case SDL_EVENT_QUIT: {
@@ -89,7 +91,7 @@ int main(int argc, char *agrc[])
 		gs.currentStateGame->update(state, gs, res, deltaTime);
 		gs.currentStateGame->render(state, gs, res, deltaTime);
 
-		SDL_Log("Window w: %d, Window h: %d", state.width, state.height);
+		//sSDL_Log("Window w: %d, Window h: %d", state.width, state.height);
 
 		// swap buffers and present
 		SDL_RenderPresent(state.renderer);

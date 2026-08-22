@@ -96,16 +96,6 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 			gs.player().directionH,
 			gs.player().directionV
 		);
-		/*SDL_RenderDebugText(state.renderer, 5, 5,
-			std::format("S: {}, C: {}, St: {}, Pos:({:.1f},{:.1f}), Dir:({},{})",
-				typeid(*gs.currentStatePlayer).name(),
-				gs.player().data.player.collectedCoins,
-				gs.player().data.player.staminaPoints,
-				gs.player().position.x,
-				gs.player().position.y,
-				gs.player().directionH,
-				gs.player().directionV
-			).c_str());*/
 	}
 }
 
@@ -115,6 +105,7 @@ void Level::exit(GameState& gs, GameObject& obj) {
 	// Reset player indices
 	gs.playerIndex = -1;
 	gs.playerLayer = -1;
+	gs.currentStatePlayer = PlayerIdle::get();
 	obj.data.player.collectedCoins = 0;
 	obj.data.player.staminaPoints = 100;
 	SDL_Log("Cleared all level tiles and objects");
@@ -136,7 +127,7 @@ void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject&
 			}
 		}
 		else { // decrese stamina with time
-			obj.data.player.staminaPoints += -0.1 * deltaTime;
+			obj.data.player.staminaPoints += -0.7 * deltaTime;
 		}
 
 		if (obj.data.player.staminaPoints <= 0) {
@@ -246,6 +237,10 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 			SDL_Event event{ UserEvents::STAMINA_RESTORED };
 			SDL_PushEvent(&event);
 			break;
+		}
+		case ObjectType::win: {
+			SDL_Event event{ UserEvents::PLAYER_WIN};
+			SDL_PushEvent(&event);
 		}
 		}
 	}
@@ -400,6 +395,20 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 						.w = 10, .h = 26
 					};
 					newLayer.push_back(juice);
+				}
+				else if (obj.type == "Win") {
+					GameObject win = createObject(1, 1, res.texSlide, ObjectType::win);
+					win.data.pickUp = PickUpData();
+					win.data.pickUp.value = 1;
+					win.position = objPos;
+					win.animations = res.playerAnims; // REMOVE for item anim
+					win.currentAnimation = res.ANIM_PLAYER_RUN;
+					win.dynamic = true;
+					win.collider = {
+						.x = 11, .y = 6,
+						.w = 10, .h = 26
+					};
+					newLayer.push_back(win);
 				}
 			}
 			gs.layers.push_back(std::move(newLayer));
