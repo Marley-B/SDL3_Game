@@ -18,3 +18,4 @@ SDL3_image
 glm
 SDL3_mixer
 tinyxml2
+SDL3_ttf

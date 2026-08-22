@@ -39,6 +39,8 @@ int main(int argc, char *agrc[])
 	initializeLevels(res);
 	gs.currentStateGame->enter(state, gs, res);
 
+	state.text = new TextRenderer(res);
+
 	int prevWidth = state.width;
 	int prevHeight = state.height;
 
@@ -149,6 +151,12 @@ bool initialize(SDLState& state) {
 	state.mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
 	if (!state.mixer) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
+		cleanup(state);
+		initSucces = false;
+	}
+
+	if (!TTF_Init()) {
+		SDL_Log("TTF_Init failed: %s", SDL_GetError());
 		cleanup(state);
 		initSucces = false;
 	}

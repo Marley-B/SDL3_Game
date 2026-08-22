@@ -63,11 +63,14 @@ void Resources::load(SDLState& state) {
 	texStRed = loadTexture(state.renderer, "data/stamina_red.png");
 	texStYellow = loadTexture(state.renderer, "data/stamina_yellow.png");
 	texStGreen = loadTexture(state.renderer, "data/stamina_green.png");
+	texStBg = loadTexture(state.renderer, "data/stamina_bg.png");
 
 	audioShoot = loadAudio(state.mixer, "data/audio/shoot.wav");
 	audioShootHit = loadAudio(state.mixer, "data/audio/wall_hit.wav");
 	audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
 	musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
+
+	font = TTF_OpenFont("data/text/Pixeled.ttf", 15);
 
 	map1 = tmx::loadMap("data/maps/smallmap.tmx");
 	if (!map1)
@@ -155,5 +158,9 @@ void Resources::unload() {
 	}
 	for (MIX_Track* track : tracks) {
 		MIX_DestroyTrack(track);
+	}
+	if (font) {
+		TTF_CloseFont(font);
+		font = nullptr;
 	}
 }

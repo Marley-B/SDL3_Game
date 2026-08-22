@@ -119,7 +119,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 CMAKE_MT:FILEPATH=C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/mt.exe
 
 //No help, variable specified on the command line.
-CMAKE_PREFIX_PATH:STRING=C:\SDK\SDL3-3.4.12;C:\SDK\SDL3_image-3.4.4;C:\SDK\glm-1.0.3-VC;C:\SDK\SDL3_mixer-3.2.4
+CMAKE_PREFIX_PATH:STRING=C:\SDK\SDL3-3.4.12;C:\SDK\SDL3_image-3.4.4;C:\SDK\glm-1.0.3-VC;C:\SDK\SDL3_mixer-3.2.4;C:\SDK\SDL3_ttf-3.2.2
 
 //Value Computed by CMake
 CMAKE_PROJECT_COMPAT_VERSION:STATIC=
@@ -227,6 +227,9 @@ SDL3_image_DIR:PATH=C:/SDK/SDL3_image-3.4.4/cmake
 
 //The directory containing a CMake configuration file for SDL3_mixer.
 SDL3_mixer_DIR:PATH=C:/SDK/SDL3_mixer-3.2.4/cmake
+
+//The directory containing a CMake configuration file for SDL3_ttf.
+SDL3_ttf_DIR:PATH=C:/SDK/SDL3_ttf-3.2.2/cmake
 
 //Detected architecture ARM32
 SDL_CPU_ARM32:BOOL=0

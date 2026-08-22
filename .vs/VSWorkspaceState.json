@@ -15,11 +15,9 @@
   },
   "ExpandedNodes": [
     "",
-    "\\data",
-    "\\data\\bg",
-    "\\data\\maps",
+    "\\build",
     "\\SDL3_Game"
   ],
-  "SelectedNode": "\\SDL3_Game\\CMakeLists.txt",
+  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }

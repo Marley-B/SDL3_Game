@@ -5,6 +5,7 @@ find_package(SDL3 REQUIRED)
 find_package(SDL3_image REQUIRED)
 find_package(glm REQUIRED)
 find_package(SDL3_mixer REQUIRED)
+find_package(SDL3_ttf REQUIRED)
 # Add source to this project's executable.
 add_executable (SDL3_Game "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" 
     "object_state.cpp" "game_status.cpp" "game_status.h" "resources.cpp" "level_state.cpp" "game_state.cpp" "ui.cpp")
@@ -14,5 +15,5 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 # TODO: Add tests and install targets if needed.
-target_link_libraries(SDL3_Game PRIVATE SDL3::SDL3 SDL3_image::SDL3_image glm::glm SDL3_mixer::SDL3_mixer)
+target_link_libraries(SDL3_Game PRIVATE SDL3::SDL3 SDL3_image::SDL3_image glm::glm SDL3_mixer::SDL3_mixer SDL3_ttf::SDL3_ttf)
 target_include_directories(SDL3_Game PRIVATE "ext/")

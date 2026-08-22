@@ -6,7 +6,7 @@
       "displayName": "x64 Debug (User)",
       "inherits": "windows-base",
       "cacheVariables": {
-        "CMAKE_PREFIX_PATH": "C:\\SDK\\SDL3-3.4.12;C:\\SDK\\SDL3_image-3.4.4;C:\\SDK\\glm-1.0.3-VC;C:\\SDK\\SDL3_mixer-3.2.4"
+        "CMAKE_PREFIX_PATH": "C:\\SDK\\SDL3-3.4.12;C:\\SDK\\SDL3_image-3.4.4;C:\\SDK\\glm-1.0.3-VC;C:\\SDK\\SDL3_mixer-3.2.4;C:\\SDK\\SDL3_ttf-3.2.2"
       }
     }
   ]

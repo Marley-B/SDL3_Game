@@ -71,7 +71,7 @@ void Level::render(SDLState& state, GameState& gs, Resources& res, GameObject& o
 		}
 	}
 
-	stUi->render(state, gs, obj);
+	stUi->render(state, gs, obj, res);
 }
 
 void Level::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {

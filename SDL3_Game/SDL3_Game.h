@@ -19,6 +19,7 @@
 #include "user_events.h"
 #include "game_status.h"
 #include "level_state.h"
+#include "ui.h"
 
 bool initialize(SDLState& state);
 void cleanup(SDLState& state);
