@@ -70,7 +70,7 @@ void Resources::load(SDLState& state) {
 	audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
 	musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
 
-	font = TTF_OpenFont("data/text/Pixeled.ttf", 15);
+	font = TTF_OpenFont("data/text/Pixeled.ttf", 14);
 
 	map1 = tmx::loadMap("data/maps/smallmap.tmx");
 	if (!map1)
