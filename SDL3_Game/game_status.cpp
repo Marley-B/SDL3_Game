@@ -22,9 +22,9 @@ void IntroMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLStat
     }
 }
 
-void IntroMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
+void IntroMenu::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {}
 
-void IntroMenu::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void IntroMenu::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
 }
 
@@ -64,9 +64,9 @@ void LevelMenu::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLStat
     }
 }
 
-void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
+void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {}
 
-void LevelMenu::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void LevelMenu::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
     button1->render(state, gs);
     button2->render(state, gs);
@@ -96,9 +96,9 @@ void DeathState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLSta
     }
 }
 
-void DeathState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
+void DeathState::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {}
 
-void DeathState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void DeathState::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
     button1->render(state, gs);
     button2->render(state, gs);
@@ -121,9 +121,9 @@ void WinState::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState
     }
 }
 
-void WinState::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {}
+void WinState::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {}
 
-void WinState::render(SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void WinState::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
     button->render(state, gs);
 }

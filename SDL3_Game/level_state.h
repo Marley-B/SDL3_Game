@@ -11,6 +11,7 @@
 #include "game_status.h"
 #include "game_state.h"
 #include "object_state.h" 
+#include "ui.h"
 
 
 // Forward declarations
@@ -27,13 +28,14 @@ public:
     static Level* get(int id);
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
-    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
+    void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
     void exit(GameState& gs, GameObject& obj);
     tmx::Map* getMap();
 private:
     int mLevelId;
     tmx::Map* mMap = nullptr;
+    StaminaUi* stUi = nullptr;
 };
 
 void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);

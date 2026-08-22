@@ -28,6 +28,8 @@ tmx::Map* Level::getMap() {
 
 bool Level::enter(SDLState& state, GameState& gs, Resources& res) {
 	createTiles(state, gs, res);
+	stUi = new StaminaUi(res);
+	stUi->setPosition(20, 20);
 	return true;
 }
 
@@ -53,7 +55,7 @@ void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& s
 	}
 }
 
-void Level::render(SDLState& state, GameState& gs, Resources& res, float deltaTime){
+void Level::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime){
 	// draw background images
 	SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
 	drawParalaxBackground(&gs, state.renderer, res.texBg4, gs.player().velocity.x, gs.bg4Scroll, 0.075f, deltaTime);
@@ -68,9 +70,11 @@ void Level::render(SDLState& state, GameState& gs, Resources& res, float deltaTi
 			}
 		}
 	}
+
+	stUi->render(state, gs, obj);
 }
 
-void Level::update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) {
+void Level::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
 	// calculate viewport position 
 	gs.mapViewport.x = (gs.player().position.x + TILE_SIZE / 2) - gs.mapViewport.w / 2 + 30;
 	gs.mapViewport.y = (gs.player().position.y + TILE_SIZE / 2) - gs.mapViewport.h / 2;
@@ -83,6 +87,8 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, float d
 			}
 		}
 	}
+
+	stUi->update(res, gs);
 
 	if (gs.debugMode == true) {
 		// Enhanced debug display with position and viewport info
@@ -108,6 +114,10 @@ void Level::exit(GameState& gs, GameObject& obj) {
 	gs.currentStatePlayer = PlayerIdle::get();
 	obj.data.player.collectedCoins = 0;
 	obj.data.player.staminaPoints = 100;
+	if (stUi) {
+		delete stUi;
+		stUi = nullptr;
+	}
 	SDL_Log("Cleared all level tiles and objects");
 }
 

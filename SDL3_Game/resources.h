@@ -24,7 +24,8 @@ struct Resources {
     std::vector<Animation> playerAnims;
     std::vector<SDL_Texture*> textures;
     SDL_Texture* texIdle, * texRun, * texSlide, * texBg1, * texBg2, * texBg3, * texBg4, *texButtHov, *texButtDown, *texButt, 
-        * texGameOverScreen, * texIntroScreen, * texLevelMenuScreen, * texWinScreen;
+        * texGameOverScreen, * texIntroScreen, * texLevelMenuScreen, * texWinScreen, *texStGreen, * texStYellow, * texStRed,
+        * texStBox;
 
     std::vector<MIX_Audio*> audioEffects;
     MIX_Audio* audioShoot, * audioShootHit, * audioEnemyHit;

@@ -43,8 +43,8 @@ public:
     virtual bool enter(SDLState& state, GameState& gs, Resources& res) = 0;
     //Main loop functions
     virtual void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj) = 0;
-    virtual void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
-    virtual void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) = 0;
+    virtual void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) = 0;
+    virtual void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) = 0;
 
     //Make sure to call child destructors
     virtual ~GameStatus() = default;
@@ -55,8 +55,8 @@ public:
     static IntroMenu* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
-    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
+    void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
 private:
     static IntroMenu sIntroMenu;
     IntroMenu() = default;
@@ -68,8 +68,8 @@ public:
     static LevelMenu* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
-    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
+    void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
 private:
     static LevelMenu sLevelMenu;
     LevelMenu() = default;
@@ -85,8 +85,8 @@ public:
     static DeathState* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
-    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
+    void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
 private:
     static DeathState sDeathState;
     SDL_Texture* mBgTexture;
@@ -100,8 +100,8 @@ public:
     static WinState* get();
     bool enter(SDLState& state, GameState& gs, Resources& res) override;
     void handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& state, GameObject& obj)  override;
-    void update(const SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
-    void render(SDLState& state, GameState& gs, Resources& res, float deltaTime) override;
+    void update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
+    void render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) override;
 private:
     static WinState sWinState;
     SDL_Texture* mBgTexture;

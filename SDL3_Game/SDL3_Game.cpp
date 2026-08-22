@@ -88,8 +88,8 @@ int main(int argc, char *agrc[])
 			gs.currentStateGame->handleEvent(event, gs, res, state, obj);  
 		}
 
-		gs.currentStateGame->update(state, gs, res, deltaTime);
-		gs.currentStateGame->render(state, gs, res, deltaTime);
+		gs.currentStateGame->update(state, gs, res, obj, deltaTime);
+		gs.currentStateGame->render(state, gs, res, obj, deltaTime);
 
 		//sSDL_Log("Window w: %d, Window h: %d", state.width, state.height);
 

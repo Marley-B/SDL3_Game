@@ -20,7 +20,6 @@
 #include "game_status.h"
 #include "level_state.h"
 
-
 bool initialize(SDLState& state);
 void cleanup(SDLState& state);
 void initializeLevels(Resources& res);
