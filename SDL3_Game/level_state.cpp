@@ -30,6 +30,8 @@ bool Level::enter(SDLState& state, GameState& gs, Resources& res) {
 	createTiles(state, gs, res);
 	stUi = new StaminaUi(res);
 	stUi->setPosition(20, 20);
+	coUi = new CoinUi();
+	coUi->setPosition(130, 14);
 	return true;
 }
 
@@ -72,6 +74,7 @@ void Level::render(SDLState& state, GameState& gs, Resources& res, GameObject& o
 	}
 
 	stUi->render(state, gs, obj, res);
+	coUi->render(state, gs);
 }
 
 void Level::update(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {

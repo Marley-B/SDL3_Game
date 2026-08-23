@@ -36,6 +36,7 @@ private:
     int mLevelId;
     tmx::Map* mMap = nullptr;
     StaminaUi* stUi = nullptr;
+    CoinUi* coUi = nullptr;
 };
 
 void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime);

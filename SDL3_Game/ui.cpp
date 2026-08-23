@@ -1,5 +1,103 @@
 #include "ui.h"
 
+
+// button related functions
+
+Button::Button(Resources& res) :
+    mPosition{ 0.f, 0.f },
+    mCurrentTexture{ res.texButt }
+{
+}
+
+void Button::setPosition(float x, float y) {
+    mPosition.x = x;
+    mPosition.y = y;
+}
+
+void Button::setDimensions(float w, float h) {
+    kButtonWidth = w;
+    kButtonHeight = h;
+}
+
+void Button::setText(SDLState& state, const std::string& text, SDL_Color color) {
+    mText = state.text->crateTexture(state, text, color);
+}
+
+bool Button::handleEvent(SDL_Event* e, Resources& res, SDLState& state) {
+    //If mouse event happened
+    if (e->type == SDL_EVENT_MOUSE_MOTION || e->type == SDL_EVENT_MOUSE_BUTTON_DOWN || e->type == SDL_EVENT_MOUSE_BUTTON_UP)
+    {
+        //Get mouse position
+        float x = -1.f, y = -1.f;
+        SDL_GetMouseState(&x, &y);
+
+        float logicalMouseX = (x / (float)state.width) * (float)state.logW;
+        float logicalMouseY = (y / (float)state.height) * (float)state.logH;
+
+        //Check if mouse is in button
+        bool inside = true;
+
+        if (logicalMouseX < mPosition.x) { // left of the button
+            inside = false;
+        }
+        else if (logicalMouseX > mPosition.x + kButtonWidth) { // right of the button
+            inside = false;
+        }
+        else if (logicalMouseY < mPosition.y) { // above the button
+            inside = false;
+        }
+        else if (logicalMouseY > mPosition.y + kButtonHeight) { //  below the button
+            inside = false;
+        }
+
+        if (!inside) { //Mouse is outside button
+            mCurrentTexture = res.texButt;
+        }
+        else { //Mouse is inside button
+            //Set mouse over sprite
+            switch (e->type) {
+            case SDL_EVENT_MOUSE_MOTION:
+                mCurrentTexture = res.texButtHov;
+                break;
+
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                mCurrentTexture = res.texButtDown;
+                return true; // return true if the mouse is pressed
+                break;
+
+            case SDL_EVENT_MOUSE_BUTTON_UP:
+                mCurrentTexture = res.texButtHov;
+                break;
+            }
+        }
+    }
+    return false;
+}
+
+void Button::render(SDLState& state, GameState& gs) {
+    SDL_FRect dst{ // Where on screen to render the sprite
+        .x = mPosition.x,
+        .y = mPosition.y,
+        .w = kButtonWidth,
+        .h = kButtonHeight
+    };
+    SDL_RenderTexture(state.renderer, mCurrentTexture, nullptr, &dst);
+
+    float centerX = mPosition.x + kButtonWidth / 2;
+    float centerY = mPosition.y + kButtonHeight / 2;
+    state.text->renderTextTexture(mText, state, mPosition.x, mPosition.y,
+        true, centerX, centerY);
+}
+
+Button::~Button() {
+    if (mText) {
+        SDL_DestroyTexture(mText);
+        mText = nullptr;
+    }
+}
+
+// Stamina functions
+
 StaminaUi::StaminaUi(Resources& res) :
     mPosition{ 0.f, 0.f },
     mCurrentTexture{ res.texStGreen },
@@ -68,9 +166,26 @@ void StaminaUi::render(SDLState& state, GameState& gs, GameObject& obj, Resource
     float centerX = mPosition.x + kStaminaWidth / 2;
     float centerY = mPosition.y + kStaminaHeight / 2;
     state.text->renderText(state, "Mana", mPosition.x, mPosition.y, color, true, centerX, centerY);
-    //TTF_Text* mana = TTF_CreateText()
-    //TTF_DrawRendererText("Mana", mPosition.x + 20, mPosition.y + 20);
 }
+
+// Coin couter
+
+CoinUi::CoinUi() :
+    mPosition{ 0.f, 0.f }
+{
+}
+
+void CoinUi::setPosition(float x, float y) {
+    mPosition.x = x;
+    mPosition.y = y;
+}
+
+void CoinUi::render(SDLState& state, GameState& gs) {
+    SDL_Color color = { 255, 255, 255, 255 };
+    state.text->renderTextVar(state, "Coin", gs.player().data.player.collectedCoins, mPosition.x, mPosition.y, color, false, 0, 0);
+}
+
+// text renderer
 
 TextRenderer::TextRenderer(Resources& res) :
     mFont{ res.font }
@@ -159,7 +274,6 @@ void TextRenderer::renderTextTexture(SDL_Texture* textTexture, SDLState& state, 
     };
 
     SDL_RenderTexture(state.renderer, textTexture, nullptr, &dstRect); // Render texture
-    SDL_DestroyTexture(textTexture); // Clean up
 }
 SDL_Texture* TextRenderer::crateTexture(SDLState& state, const std::string& text, SDL_Color color) {
     SDL_Surface* textSurface = TTF_RenderText_Solid(mFont, text.c_str(), text.size(), color);
@@ -170,8 +284,8 @@ SDL_Texture* TextRenderer::crateTexture(SDLState& state, const std::string& text
 
 SDL_Texture* TextRenderer::crateTextureVar(SDLState& state, const std::string& text, auto var, SDL_Color color) {
     char buffer[64];
-    snprintf(buffer, sizeof(buffer), "%s%d", text.c_str(), var);
-    SDL_Surface* textSurface = TTF_RenderText_Solid(mFont, buffer, 64, color);
+    snprintf(buffer, sizeof(buffer), "%s: %d", text.c_str(), (int)trunc(var));
+    SDL_Surface* textSurface = TTF_RenderText_Solid(mFont, buffer, strlen(buffer), color);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(state.renderer, textSurface);
     SDL_DestroySurface(textSurface);
     return textTexture;

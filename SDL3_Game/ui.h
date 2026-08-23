@@ -6,9 +6,32 @@
 #include "game_state.h"
 #include "resources.h"
 
-class StaminaUi {
+class Button {
 public:
     //Button dimensions
+    float kButtonWidth = 100;
+    float kButtonHeight = 50;
+
+    //Initializes internal variables
+    Button(Resources& res);
+    ~Button();
+    void setPosition(float x, float y); //Sets top left position
+    void setDimensions(float w, float h);
+    void setText(SDLState& state, const std::string& text, SDL_Color color);
+    bool handleEvent(SDL_Event* e, Resources& res, SDLState& state); //Handles mouse event
+    void render(SDLState& state, GameState& gs); //Shows button sprite
+
+private:
+    //Top left position
+    SDL_FPoint mPosition;
+    //Currently used sprite
+    SDL_Texture* mCurrentTexture;
+    SDL_Texture* mText;
+};
+
+class StaminaUi {
+public:
+    //Bar dimensions
     float kStaminaWidth = 100;
     float kStaminaHeight = 30;
 
@@ -25,6 +48,17 @@ private:
     SDL_Texture* mCurrentTexture;
     SDL_Texture* mBoxTexture;
     SDL_Texture* mBgTexture;
+};
+
+class CoinUi {
+public:
+    CoinUi();
+    void setPosition(float x, float y); //Sets top left position
+    void render(SDLState& state, GameState& gs);
+
+private:
+    //Top left position
+    SDL_FPoint mPosition;
 };
 
 class TextRenderer {

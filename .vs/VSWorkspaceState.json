@@ -15,17 +15,8 @@
   },
   "ExpandedNodes": [
     "",
-    "\\build\\CMakeFiles\\4.2.1",
-    "\\build\\CMakeFiles\\4.2.1\\CompilerIdC",
-    "\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX",
-    "\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\Debug",
-    "\\build\\CMakeFiles\\4.2.1\\CompilerIdCXX\\Debug\\CompilerIdCXX.tlog",
-    "\\build\\CMakeFiles\\4.2.1\\CompilerIdC\\Debug\\CompilerIdC.tlog",
-    "\\build\\x64",
-    "\\build\\x64\\Debug",
-    "\\build\\x64\\Debug\\ZERO_CHECK",
-    "\\build\\x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog"
+    "\\SDL3_Game"
   ],
-  "SelectedNode": "\\out",
+  "SelectedNode": "\\SDL3_Game",
   "PreviewInSolutionExplorer": false
 }
