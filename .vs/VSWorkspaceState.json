@@ -15,8 +15,12 @@
   },
   "ExpandedNodes": [
     "",
+    "\\data",
+    "\\data\\bg",
+    "\\data\\maps",
+    "\\data\\ui",
     "\\SDL3_Game"
   ],
-  "SelectedNode": "\\SDL3_Game",
+  "SelectedNode": "\\data\\maps\\Level1.tmx",
   "PreviewInSolutionExplorer": false
 }

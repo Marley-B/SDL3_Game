@@ -19,12 +19,15 @@ struct TileSetTextures
 
 struct Resources {
     const int ANIM_PLAYER_IDLE = 0;
-    const int ANIM_PLAYER_RUN = 1;
-    const int ANIM_PLAYER_SLIDE = 2;
-
+    const int ANIM_PLAYER_FLY = 1;
     std::vector<Animation> playerAnims;
+    const int ANIM_SMALL_BUTTERFLY = 0;
+    const int ANIM_BIG_BUTTERFLY = 1;
+    const int ANIM_MANA = 2;
+    std::vector<Animation> objectAnims;
+
     std::vector<SDL_Texture*> textures;
-    SDL_Texture* texIdle, * texRun, * texSlide, * texBg1, * texBg2, * texBg3, * texBg4, *texButtHov, *texButtDown, *texButt, 
+    SDL_Texture* texIdle, * texFly, *texMana, * texBigButterfly, *texSmallButterfly, * texBg1, * texBg2, * texBg3, * texBg4, * texBg5, *texButtHov, *texButtDown, *texButt,
         * texGameOverScreen, * texIntroScreen, * texLevelMenuScreen, * texWinScreen, *texStGreen, * texStYellow, * texStRed,
         * texStBox, * texStBg;
 

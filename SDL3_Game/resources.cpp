@@ -40,30 +40,36 @@ MIX_Track* Resources::loadTrack(MIX_Mixer* mixer, const std::string& filepath) {
 }
 
 void Resources::load(SDLState& state) {
-	playerAnims.resize(3);
-	playerAnims[ANIM_PLAYER_IDLE] = Animation(8, 1.6f);
-	playerAnims[ANIM_PLAYER_RUN] = Animation(4, 0.5f);
-	playerAnims[ANIM_PLAYER_SLIDE] = Animation(1, 1.0f);
+	playerAnims.resize(2);
+	objectAnims.resize(3);
+	playerAnims[ANIM_PLAYER_IDLE] = Animation(3, 1.6f);
+	playerAnims[ANIM_PLAYER_FLY] = Animation(3, 0.5f);
+	objectAnims[ANIM_SMALL_BUTTERFLY] = Animation(3, 1.0f);
+	objectAnims[ANIM_BIG_BUTTERFLY] = Animation(3, 1.0f);
+	objectAnims[ANIM_MANA] = Animation(3, 1.0f);
 
 	texIdle = loadTexture(state.renderer, "data/idle.png");
-	texRun = loadTexture(state.renderer, "data/run.png");
-	texSlide = loadTexture(state.renderer, "data/slide.png");
+	texFly = loadTexture(state.renderer, "data/fly.png");
+	texMana = loadTexture(state.renderer, "data/mana.png");
+	texBigButterfly = loadTexture(state.renderer, "data/bigButterfly.png");
+	texSmallButterfly = loadTexture(state.renderer, "data/smallButterfly.png");
 	texBg1 = loadTexture(state.renderer, "data/bg/bg_layer1.png");
 	texBg2 = loadTexture(state.renderer, "data/bg/bg_layer2.png");
 	texBg3 = loadTexture(state.renderer, "data/bg/bg_layer3.png");
 	texBg4 = loadTexture(state.renderer, "data/bg/bg_layer4.png");
+	texBg5 = loadTexture(state.renderer, "data/bg/bg_layer5.png");
 	texGameOverScreen = loadTexture(state.renderer, "data/bg/gameOverScreen.png");
 	texIntroScreen = loadTexture(state.renderer, "data/bg/introScreen.png");
 	texLevelMenuScreen = loadTexture(state.renderer, "data/bg/levelMenuScreen.png");
 	texWinScreen = loadTexture(state.renderer, "data/bg/winScreen.png");
-	texButtHov = loadTexture(state.renderer, "data/button_hovering.png");
-	texButtDown = loadTexture(state.renderer, "data/button_down.png");
-	texButt = loadTexture(state.renderer, "data/button_idle.png");
-	texStBox = loadTexture(state.renderer, "data/stamina_box.png");
-	texStRed = loadTexture(state.renderer, "data/stamina_red.png");
-	texStYellow = loadTexture(state.renderer, "data/stamina_yellow.png");
-	texStGreen = loadTexture(state.renderer, "data/stamina_green.png");
-	texStBg = loadTexture(state.renderer, "data/stamina_bg.png");
+	texButtHov = loadTexture(state.renderer, "data/ui/button_hovering.png");
+	texButtDown = loadTexture(state.renderer, "data/ui/button_idle.png");
+	texButt = loadTexture(state.renderer, "data/ui/button_idle.png");
+	texStBox = loadTexture(state.renderer, "data/ui/stamina_box.png");
+	texStRed = loadTexture(state.renderer, "data/ui/stamina_red.png");
+	texStYellow = loadTexture(state.renderer, "data/ui/stamina_yellow.png");
+	texStGreen = loadTexture(state.renderer, "data/ui/stamina_green.png");
+	texStBg = loadTexture(state.renderer, "data/ui/stamina_bg.png");
 
 	audioShoot = loadAudio(state.mixer, "data/audio/shoot.wav");
 	audioShootHit = loadAudio(state.mixer, "data/audio/wall_hit.wav");
@@ -72,7 +78,7 @@ void Resources::load(SDLState& state) {
 
 	font = TTF_OpenFont("data/text/Pixeled.ttf", 14);
 
-	map1 = tmx::loadMap("data/maps/smallmap.tmx");
+	map1 = tmx::loadMap("data/maps/Level1.tmx");
 	if (!map1)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
@@ -110,7 +116,7 @@ void Resources::load(SDLState& state) {
 		tilesetTextures.push_back(std::move(tst));
 	}
 
-	map2 = tmx::loadMap("data/maps/smallmap.tmx");
+	map2 = tmx::loadMap("data/maps/Level1.tmx");
 	if (!map2)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);

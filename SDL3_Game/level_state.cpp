@@ -60,6 +60,7 @@ void Level::handleEvent(SDL_Event& e, GameState& gs, Resources& res, SDLState& s
 void Level::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime){
 	// draw background images
 	SDL_RenderTexture(state.renderer, res.texBg1, nullptr, nullptr);
+	drawParalaxBackground(&gs, state.renderer, res.texBg5, gs.player().velocity.x, gs.bg5Scroll, 0.025f, deltaTime);
 	drawParalaxBackground(&gs, state.renderer, res.texBg4, gs.player().velocity.x, gs.bg4Scroll, 0.075f, deltaTime);
 	drawParalaxBackground(&gs, state.renderer, res.texBg3, gs.player().velocity.x, gs.bg3Scroll, 0.15f, deltaTime);
 	drawParalaxBackground(&gs, state.renderer, res.texBg2, gs.player().velocity.x, gs.bg2Scroll, 0.3f, deltaTime);
@@ -252,6 +253,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 			break;
 		}
 		case ObjectType::win: {
+			objA.data.player.collectedCoins += objB.data.pickUp.value;
 			SDL_Event event{ UserEvents::PLAYER_WIN};
 			SDL_PushEvent(&event);
 		}
@@ -374,20 +376,20 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					player.directionV = 0;
 					player.dynamic = true;
 					player.collider = {
-						.x = 11, .y = 6,
-						.w = 10, .h = 26
+						.x = 1, .y = 2,
+						.w = 30, .h = 26
 					};
 					newLayer.push_back(player);
 					gs.playerIndex = 0;
 					gs.playerLayer = gs.layers.size();
 				}
 				else if (obj.type == "Coin") {
-					GameObject coin = createObject(1, 1, res.texIdle, ObjectType::coin);
+					GameObject coin = createObject(1, 1, res.texBigButterfly, ObjectType::coin);
 					coin.data.pickUp = PickUpData();
 					coin.data.pickUp.value = 1;
 					coin.position = objPos;
-					coin.animations = res.playerAnims; // REMOVE for item anim
-					coin.currentAnimation = res.ANIM_PLAYER_IDLE;
+					coin.animations = res.objectAnims;
+					coin.currentAnimation = res.ANIM_BIG_BUTTERFLY;
 					coin.dynamic = true;
 					coin.collider = {
 						.x = 11, .y = 6,
@@ -395,13 +397,27 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					};
 					newLayer.push_back(coin);
 				}
+				else if (obj.type == "SmallB") {
+					GameObject smallB = createObject(1, 1, res.texSmallButterfly, ObjectType::coin);
+					smallB.data.pickUp = PickUpData();
+					smallB.data.pickUp.value = 0;
+					smallB.position = objPos;
+					smallB.animations = res.objectAnims;
+					smallB.currentAnimation = res.ANIM_SMALL_BUTTERFLY;
+					smallB.dynamic = true;
+					smallB.collider = {
+						.x = 0, .y = 0,
+						.w = 0, .h = 0
+					};
+					newLayer.push_back(smallB);
+				}
 				else if (obj.type == "Juice") {
-					GameObject juice = createObject(1, 1, res.texRun, ObjectType::juice);
+					GameObject juice = createObject(1, 1, res.texMana, ObjectType::juice);
 					juice.data.pickUp = PickUpData();
 					juice.data.pickUp.value = 50;
 					juice.position = objPos;
-					juice.animations = res.playerAnims; // REMOVE for item anim
-					juice.currentAnimation = res.ANIM_PLAYER_RUN;
+					juice.animations = res.objectAnims; 
+					juice.currentAnimation = res.ANIM_MANA;
 					juice.dynamic = true;
 					juice.collider = {
 						.x = 11, .y = 6,
@@ -410,12 +426,12 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					newLayer.push_back(juice);
 				}
 				else if (obj.type == "Win") {
-					GameObject win = createObject(1, 1, res.texSlide, ObjectType::win);
+					GameObject win = createObject(1, 1, res.texBigButterfly, ObjectType::win);
 					win.data.pickUp = PickUpData();
 					win.data.pickUp.value = 1;
 					win.position = objPos;
-					win.animations = res.playerAnims; // REMOVE for item anim
-					win.currentAnimation = res.ANIM_PLAYER_RUN;
+					win.animations = res.objectAnims;
+					win.currentAnimation = res.ANIM_BIG_BUTTERFLY;
 					win.dynamic = true;
 					win.collider = {
 						.x = 11, .y = 6,

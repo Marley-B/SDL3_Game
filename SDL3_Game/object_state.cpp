@@ -75,8 +75,8 @@ PlayerFly* PlayerFly::get() {
 }
 
 bool PlayerFly::enter(Resources& res, GameObject& obj) {
-    obj.texture = res.texRun;
-    obj.currentAnimation = res.ANIM_PLAYER_RUN;
+    obj.texture = res.texFly;
+    obj.currentAnimation = res.ANIM_PLAYER_FLY;
     return true;
 }
 
