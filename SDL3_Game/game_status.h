@@ -81,6 +81,7 @@ public:
 private:
     static WinState sWinState;
     SDL_Texture* mBgTexture;
+    CoinUi* coUi = nullptr;
     std::vector<std::unique_ptr<Button>> mButtons;
     WinState() = default;
 };

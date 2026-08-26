@@ -27,11 +27,13 @@ tmx::Map* Level::getMap() {
 
 
 bool Level::enter(SDLState& state, GameState& gs, Resources& res) {
+	SDL_Log("Cleared all level tiles and objects");
 	createTiles(state, gs, res);
 	stUi = new StaminaUi(res);
 	stUi->setPosition(20, 20);
 	coUi = new CoinUi();
 	coUi->setPosition(130, 14);
+	gs.coinsCollected = 0;
 	return true;
 }
 
@@ -110,6 +112,7 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, GameObj
 }
 
 void Level::exit(GameState& gs, GameObject& obj) {
+	gs.coinsCollected = gs.player().data.player.collectedCoins;
 	// Clear all layers
 	gs.layers.clear();
 	// Reset player indices
@@ -193,29 +196,24 @@ void checkCollision(const SDLState& state, GameState& gs, Resources& res, GameOb
 void collisionResponse(const SDLState& state, GameState& gs, Resources& res, const SDL_FRect& recA, const SDL_FRect& recB,
 	const SDL_FRect& recC, GameObject& objA, GameObject& objB, float deltaTime) {
 
-	// pushes the object back so they stop cliping with what they collided
-	const auto genericResponse = [&]() {
-		if (recC.w < recC.h) {
-			// horizontal colision
-			if (objA.velocity.x > 0) { // going right
+	const auto resolvePosition = [&]() {
+		if (recC.w < recC.h) { // horizontal collision
+			if (recA.x < recB.x) { // player is to the left
 				objA.position.x -= recC.w;
 			}
-			else if (objA.velocity.x < 0) { // going left
+			else { // player is to the right
 				objA.position.x += recC.w;
 			}
-			objA.velocity.x = 0;
 		}
-		else {
-			// vertical collision
-			if (objA.velocity.y > 0) { // going down
+		else { // vertical collision
+			if (recA.y < recB.y) { // player is above
 				objA.position.y -= recC.h;
 			}
-			else if (objA.velocity.y < 0) { // going up
+			else { // player is below
 				objA.position.y += recC.h;
 			}
-			objA.velocity.y = 0;
 		}
-		};
+	};
 
 	//object we are checking 
 	if (objA.type == ObjectType::player) {
@@ -226,9 +224,19 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
 				objA.data.player.invincible = true;
 			}
-			glm::vec2 prevVel = objA.velocity;
-			genericResponse();
-			objA.velocity = -prevVel; // bounce of wall
+			glm::vec2 collisionNormal(0.0f); // Store collision direction for bounce
+			if (recC.w < recC.h) { // Horizontal collision
+				collisionNormal.x = (recA.x < recB.x) ? -1.0f : 1.0f; // player to the left? normal -1 ...
+			}
+			else { // Vertical collision
+				collisionNormal.y = (recA.y < recB.y) ? -1.0f : 1.0f;
+			}
+
+			resolvePosition();
+
+			// Apply bounce based on collision normal
+			float bounceStrength = 1.0f; 
+			objA.velocity = collisionNormal * glm::length(objA.velocity) * bounceStrength;
 			objA.shouldFlash = true;
 			break;
 		}
@@ -376,8 +384,8 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					player.directionV = 0;
 					player.dynamic = true;
 					player.collider = {
-						.x = 1, .y = 2,
-						.w = 30, .h = 26
+						.x = 5, .y = 5,
+						.w = 20, .h = 20
 					};
 					newLayer.push_back(player);
 					gs.playerIndex = 0;
@@ -392,8 +400,8 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					coin.currentAnimation = res.ANIM_BIG_BUTTERFLY;
 					coin.dynamic = true;
 					coin.collider = {
-						.x = 11, .y = 6,
-						.w = 10, .h = 26
+						.x = 5, .y = 5,
+						.w = 20, .h = 26
 					};
 					newLayer.push_back(coin);
 				}
@@ -456,7 +464,7 @@ void drawParalaxBackground(GameState* gs, SDL_Renderer* renderer, SDL_Texture* t
 	if (scrollPos <= -texture->w) {
 		scrollPos = 0;
 	}
-	float yPos = -gs->mapViewport.y + 330;
+	float yPos = -gs->mapViewport.y + 191;
 
 	SDL_FRect dst{
 		.x = scrollPos,

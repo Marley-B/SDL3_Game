@@ -13,6 +13,7 @@ struct GameState {
 	std::vector<std::vector<GameObject>> layers;
 	//std::vector<GameObject> coins;
 	int playerLayer, playerIndex;
+	float coinsCollected;
 	SDL_FRect mapViewport;
 	float bg2Scroll, bg3Scroll, bg4Scroll, bg5Scroll;
 	bool debugMode;

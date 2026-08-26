@@ -18,9 +18,10 @@
     "\\data",
     "\\data\\bg",
     "\\data\\maps",
+    "\\data\\tiles",
     "\\data\\ui",
     "\\SDL3_Game"
   ],
-  "SelectedNode": "\\data\\maps\\Level1.tmx",
+  "SelectedNode": "\\SDL3_Game\\game_state.h",
   "PreviewInSolutionExplorer": false
 }

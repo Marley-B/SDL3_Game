@@ -11,8 +11,9 @@ GameState::GameState(const SDLState& state) {
 		.w = static_cast<float>(state.logW),
 		.h = static_cast<float>(state.logH)
 	};
-	bg2Scroll = bg3Scroll = bg4Scroll = 0;
+	bg2Scroll = bg3Scroll = bg4Scroll = bg5Scroll = 0;
 	debugMode = false;
+	coinsCollected = 0;
 	currentStatePlayer = PlayerIdle::get();;
 	currentStateGame = IntroMenu::get();
 }

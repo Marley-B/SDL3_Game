@@ -1,6 +1,7 @@
 // manages the difrent game states the game can change through
 #include "game_status.h"
 #include "level_state.h" 
+#include "ui.h"
 
 IntroMenu IntroMenu::sIntroMenu;
 LevelMenu LevelMenu::sLevelMenu;
@@ -117,11 +118,13 @@ WinState* WinState::get() {
 }
 
 bool WinState::enter(SDLState& state, GameState& gs, Resources& res) {
+    coUi = new CoinUi();
+    coUi->setPosition(455, 180);
     SDL_Color color = { 0, 0, 255, 255 };
     mBgTexture = res.texWinScreen;
     mButtons.clear();
     auto button = std::make_unique<Button>(res);
-    button->setPosition(400, 150);
+    button->setPosition(450, 250);
     button->setText(state, "Menu", color);
     mButtons.push_back(std::move(button));
     return true;
@@ -138,6 +141,7 @@ void WinState::update(const SDLState& state, GameState& gs, Resources& res, Game
 void WinState::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
     mButtons[0]->render(state, gs);
+    coUi->renderWithCount(state, gs.coinsCollected);
 }
 bool changeState(GameStatus* newState, GameStatus*& currentState, Resources& res, SDLState& state, GameState& gs) {
     if (newState != nullptr && newState != currentState) {

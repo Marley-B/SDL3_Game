@@ -55,6 +55,7 @@ public:
     CoinUi();
     void setPosition(float x, float y); //Sets top left position
     void render(SDLState& state, GameState& gs);
+    void renderWithCount(SDLState& state, int count);
 
 private:
     //Top left position

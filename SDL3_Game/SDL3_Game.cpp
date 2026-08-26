@@ -83,6 +83,9 @@ int main(int argc, char *agrc[])
 						state.fullscreen = !state.fullscreen;
 						SDL_SetWindowFullscreen(state.window, state.fullscreen);
 					}
+					else if (event.key.scancode == SDL_SCANCODE_ESCAPE) {
+						running = false;
+					}
 					break;
 				}
 			}

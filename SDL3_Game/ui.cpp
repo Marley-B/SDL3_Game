@@ -182,7 +182,12 @@ void CoinUi::setPosition(float x, float y) {
 
 void CoinUi::render(SDLState& state, GameState& gs) {
     SDL_Color color = { 255, 255, 255, 255 };
-    state.text->renderTextVar(state, "Butterlfy", gs.player().data.player.collectedCoins, mPosition.x, mPosition.y, color, false, 0, 0);
+    state.text->renderTextVar(state, "Butterfly", gs.player().data.player.collectedCoins, mPosition.x, mPosition.y, color, false, 0, 0);
+}
+
+void CoinUi::renderWithCount(SDLState& state, int count) {
+    SDL_Color color = { 10, 0, 255, 255 };
+    state.text->renderTextVar(state, "Butterflies", count, mPosition.x, mPosition.y, color, false, 0, 0);
 }
 
 // text renderer
