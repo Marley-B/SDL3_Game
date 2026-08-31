@@ -20,12 +20,14 @@ public:
     void setText(SDLState& state, const std::string& text, SDL_Color color);
     bool handleEvent(SDL_Event* e, Resources& res, SDLState& state); //Handles mouse event
     void render(SDLState& state, GameState& gs); //Shows button sprite
+    void renderStar(SDLState& state);
 
 private:
     //Top left position
     SDL_FPoint mPosition;
     //Currently used sprite
     SDL_Texture* mCurrentTexture;
+    SDL_Texture* mStarTexture;
     SDL_Texture* mText;
 };
 

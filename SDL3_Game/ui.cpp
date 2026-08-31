@@ -5,7 +5,8 @@
 
 Button::Button(Resources& res) :
     mPosition{ 0.f, 0.f },
-    mCurrentTexture{ res.texButt }
+    mCurrentTexture{ res.texButt },
+    mStarTexture{ res.texBigButterfly }
 {
 }
 
@@ -87,6 +88,24 @@ void Button::render(SDLState& state, GameState& gs) {
     float centerY = mPosition.y + kButtonHeight / 2;
     state.text->renderTextTexture(mText, state, mPosition.x, mPosition.y,
         true, centerX, centerY);
+}
+
+void Button::renderStar(SDLState& state) {
+
+    SDL_FRect src{ // Portion of the texture to copy
+        .x = 0,
+        .y = 0,
+        .w = 32,
+        .h = 32
+    };
+
+    SDL_FRect dst{ // Where on screen to render the sprite
+        .x = mPosition.x,
+        .y = mPosition.y - 10,
+        .w = (kButtonWidth/3),
+        .h = (kButtonWidth / 3)
+    };
+    SDL_RenderTexture(state.renderer, mStarTexture, &src, &dst);
 }
 
 Button::~Button() {

@@ -113,6 +113,9 @@ void Level::update(const SDLState& state, GameState& gs, Resources& res, GameObj
 
 void Level::exit(GameState& gs, GameObject& obj) {
 	gs.coinsCollected = gs.player().data.player.collectedCoins;
+	if (gs.coinsCollected > highScore) {
+		highScore = gs.coinsCollected;
+	}
 	// Clear all layers
 	gs.layers.clear();
 	// Reset player indices
@@ -144,7 +147,7 @@ void objUpdate(const SDLState& state, GameState& gs, Resources& res, GameObject&
 			}
 		}
 		else { // decrese stamina with time
-			obj.data.player.staminaPoints += -0.7 * deltaTime;
+			obj.data.player.staminaPoints += -3.5 * deltaTime;
 		}
 
 		if (obj.data.player.staminaPoints <= 0) {
@@ -221,7 +224,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 		switch (objB.type) {
 		case ObjectType::level: {
 			if (!objA.data.player.invincible) {
-				objA.data.player.staminaPoints -= 10; // depleet stamina on hit
+				objA.data.player.staminaPoints -= 20; // depleet stamina on hit
 				objA.data.player.invincible = true;
 			}
 			glm::vec2 collisionNormal(0.0f); // Store collision direction for bounce
@@ -284,6 +287,8 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 		SDL_Log("createTiles: level map is null");
 		return;
 	}
+
+	gs.currentLevel->totalButterflies = 0;
 
 	struct LayerVisitor {
 		const SDLState& state;
@@ -391,20 +396,6 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					gs.playerIndex = 0;
 					gs.playerLayer = gs.layers.size();
 				}
-				else if (obj.type == "Coin") {
-					GameObject coin = createObject(1, 1, res.texBigButterfly, ObjectType::coin);
-					coin.data.pickUp = PickUpData();
-					coin.data.pickUp.value = 1;
-					coin.position = objPos;
-					coin.animations = res.objectAnims;
-					coin.currentAnimation = res.ANIM_BIG_BUTTERFLY;
-					coin.dynamic = true;
-					coin.collider = {
-						.x = 5, .y = 5,
-						.w = 20, .h = 26
-					};
-					newLayer.push_back(coin);
-				}
 				else if (obj.type == "SmallB") {
 					GameObject smallB = createObject(1, 1, res.texSmallButterfly, ObjectType::coin);
 					smallB.data.pickUp = PickUpData();
@@ -433,6 +424,21 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 					};
 					newLayer.push_back(juice);
 				}
+				else if (obj.type == "Coin") {
+					GameObject coin = createObject(1, 1, res.texBigButterfly, ObjectType::coin);
+					coin.data.pickUp = PickUpData();
+					coin.data.pickUp.value = 1;
+					coin.position = objPos;
+					coin.animations = res.objectAnims;
+					coin.currentAnimation = res.ANIM_BIG_BUTTERFLY;
+					coin.dynamic = true;
+					coin.collider = {
+						.x = 5, .y = 5,
+						.w = 20, .h = 26
+					};
+					newLayer.push_back(coin);
+					gs.currentLevel->totalButterflies += 1;
+				}
 				else if (obj.type == "Win") {
 					GameObject win = createObject(1, 1, res.texBigButterfly, ObjectType::win);
 					win.data.pickUp = PickUpData();
@@ -446,6 +452,7 @@ void createTiles(const SDLState& state, GameState& gs, Resources& res) {
 						.w = 10, .h = 26
 					};
 					newLayer.push_back(win);
+					gs.currentLevel->totalButterflies += 1;
 				}
 			}
 			gs.layers.push_back(std::move(newLayer));

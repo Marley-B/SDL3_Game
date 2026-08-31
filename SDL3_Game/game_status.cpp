@@ -38,19 +38,19 @@ bool LevelMenu::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texLevelMenuScreen;
     mButtons.clear(); // Clear existing buttons
     auto button1 = std::make_unique<Button>(res);
-    button1->setPosition(20, 150);
+    button1->setPosition(180, 120);
     button1->setText(state, "1", color);
     mButtons.push_back(std::move(button1));
     auto button2 = std::make_unique<Button>(res);
-    button2->setPosition(160, 150);
+    button2->setPosition(360, 120);
     button2->setText(state, "2", color);
     mButtons.push_back(std::move(button2));
     auto button3 = std::make_unique<Button>(res);
-    button3->setPosition(310, 150);
+    button3->setPosition(180, 200);
     button3->setText(state, "3", color);
     mButtons.push_back(std::move(button3));
     auto button4 = std::make_unique<Button>(res);
-    button4->setPosition(490, 150);
+    button4->setPosition(360, 200);
     button4->setText(state, "4", color);
     mButtons.push_back(std::move(button4));
     return true;
@@ -71,8 +71,13 @@ void LevelMenu::update(const SDLState& state, GameState& gs, Resources& res, Gam
 
 void LevelMenu::render(SDLState& state, GameState& gs, Resources& res, GameObject& obj, float deltaTime) {
     SDL_RenderTexture(state.renderer, mBgTexture, nullptr, nullptr);
+    int i = 0;
     for (auto& button : mButtons) {
         button->render(state, gs);
+        if (Level::sLevels[i]->totalButterflies == Level::sLevels[i]->highScore) { // if high score has been achived
+            button->renderStar(state);
+        }
+        i++;
     }
 }
 

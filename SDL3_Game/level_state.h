@@ -23,6 +23,8 @@ class GameStatus;
 
 class Level : public GameStatus {
 public:
+    int totalButterflies = 0;
+    int highScore = -1;
     static std::vector<Level*> sLevels;
     Level(int levelId, std::unique_ptr<tmx::Map>& map);
     static Level* get(int id);

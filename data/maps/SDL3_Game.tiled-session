@@ -1,15 +1,61 @@
 {
-    "activeFile": "",
+    "activeFile": "map1.tmx",
     "expandedProjectPaths": [
+        "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/Level1.tmx": {
+            "scale": 0.7124999999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 749.4736842105264,
+                "y": 331.2280701754387
+            }
+        },
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/SDL3_tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/Tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/map1.tmx": {
+            "scale": 0.9737499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 479.5892169448011,
+                "y": 418.9987163029525
+            }
+        },
+        "SDL3_tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map1.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 634,
+                "y": 289.33333333333326
+            }
+        }
     },
     "last.imagePath": "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/tiles",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
+        "SDL3_tiles.tsx",
+        "map1.tmx"
     ],
     "project": "SDL3_Game.tiled-project",
     "recentFiles": [
+        "SDL3_tiles.tsx",
+        "map1.tmx",
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/map1.tmx",
+        "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/data/maps/Level1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1
