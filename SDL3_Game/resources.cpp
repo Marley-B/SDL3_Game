@@ -116,7 +116,7 @@ void Resources::load(SDLState& state) {
 		tilesetTextures.push_back(std::move(tst));
 	}
 
-	map2 = tmx::loadMap("data/maps/map1.tmx");
+	map2 = tmx::loadMap("data/maps/map2.tmx");
 	if (!map2)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
@@ -125,6 +125,26 @@ void Resources::load(SDLState& state) {
 	// Verify map properties
 	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
 		map2->mapWidth, map2->mapHeight, map2->tileWidth, map2->tileHeight);
+
+	map3 = tmx::loadMap("data/maps/map3.tmx");
+	if (!map3)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
+		return;
+	}
+	// Verify map properties
+	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
+		map3->mapWidth, map3->mapHeight, map3->tileWidth, map3->tileHeight);
+
+	map4 = tmx::loadMap("data/maps/map4.tmx");
+	if (!map4)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Failed to load map file", state.window);
+		return;
+	}
+	// Verify map properties
+	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
+		map4->mapWidth, map4->mapHeight, map4->tileWidth, map4->tileHeight);
 
 	//for (tmx::TileSet& tileSet : map2->tileSets) {
 	//	TileSetTextures tst;

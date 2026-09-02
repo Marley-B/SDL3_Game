@@ -40,6 +40,8 @@ struct Resources {
     std::vector<std::unique_ptr<tmx::Map>> maps;
     std::unique_ptr<tmx::Map> map1;
     std::unique_ptr<tmx::Map> map2;
+    std::unique_ptr<tmx::Map> map3;
+    std::unique_ptr<tmx::Map> map4;
 
     TTF_Font* font;
 

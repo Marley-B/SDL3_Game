@@ -90,11 +90,11 @@ bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texGameOverScreen;
     mButtons.clear();
     auto button1 = std::make_unique<Button>(res);
-    button1->setPosition(40, 120);
+    button1->setPosition(40, 130);
     button1->setText(state, "Retry", color);
     mButtons.push_back(std::move(button1));
     auto button2 = std::make_unique<Button>(res);
-    button2->setPosition(40, 190);
+    button2->setPosition(40, 200);
     button2->setText(state, "Menu", color);
     mButtons.push_back(std::move(button2));
     return true;

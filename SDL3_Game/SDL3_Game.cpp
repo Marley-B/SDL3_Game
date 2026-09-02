@@ -111,8 +111,8 @@ void initializeLevels(Resources& res) {
 	if (Level::sLevels.empty()) {
 		Level::sLevels.push_back(new Level(1, res.map1));
 		Level::sLevels.push_back(new Level(2, res.map2));
-		Level::sLevels.push_back(new Level(3, res.map1));
-		Level::sLevels.push_back(new Level(4, res.map1));
+		Level::sLevels.push_back(new Level(3, res.map3));
+		Level::sLevels.push_back(new Level(4, res.map4));
 	}
 }
 
