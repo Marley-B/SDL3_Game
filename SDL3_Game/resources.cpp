@@ -25,19 +25,10 @@ MIX_Audio* Resources::loadAudio(MIX_Mixer* mixer, const std::string& filepath) {
 	return audio;
 }
 
-MIX_Track* Resources::loadTrack(MIX_Mixer* mixer, const std::string& filepath) {
-	MIX_Audio* audio = MIX_LoadAudio(mixer, filepath.c_str(), true);
-	if (!audio) {
-		SDL_Log("Failed to load music audio: %s - %s", filepath.c_str(), SDL_GetError());
-		return nullptr;
-	}
-	audioEffects.push_back(audio);
-	MIX_Track* track = MIX_CreateTrack(mixer);
-	MIX_SetTrackAudio(track, audio);
-	MIX_SetTrackLoops(track, -1);  // Set to loop infinitely
-	tracks.push_back(track);
-	return track;
-}
+//MIX_Track* Resources::loadTrack(MIX_Mixer* mixer, const std::string& filepath) {
+//	MIX_Track* track = MIX_CreateTrack(mixer);
+//	return track;
+//}
 
 void Resources::load(SDLState& state) {
 	playerAnims.resize(2);
@@ -71,10 +62,22 @@ void Resources::load(SDLState& state) {
 	texStGreen = loadTexture(state.renderer, "data/ui/stamina_green.png");
 	texStBg = loadTexture(state.renderer, "data/ui/stamina_bg.png");
 
-	audioShoot = loadAudio(state.mixer, "data/audio/shoot.wav");
-	audioShootHit = loadAudio(state.mixer, "data/audio/wall_hit.wav");
-	audioEnemyHit = loadAudio(state.mixer, "data/audio/shoot_hit.wav");
-	musicMain = loadTrack(state.mixer, "data/audio/Juhani Junkala [Retro Game Music Pack] Level 1.mp3");
+	audioButt = loadAudio(gMixer, "data/audio/butterfly_fluttering.wav");
+	audioWin = loadAudio(gMixer, "data/audio/player_win.wav");
+	audioLose = loadAudio(gMixer, "data/audio/player_lose.wav");
+	audioHit = loadAudio(gMixer, "data/audio/player_hit.wav");
+	audioMana = loadAudio(gMixer, "data/audio/mana.wav");
+
+	audioMusic = loadAudio(gMixer, "data/audio/bensound-yesterday.wav");
+	if (musicTrack = MIX_CreateTrack(gMixer); musicTrack == nullptr){
+		SDL_Log("Failed to create music track! SDL_mixer Error: %s\n", SDL_GetError());
+		musicTrack = nullptr;
+	}
+	else{
+		//Set audio for track
+		MIX_SetTrackAudio(musicTrack, audioMusic);
+		tracks.push_back(musicTrack);
+	}
 
 	font = TTF_OpenFont("data/text/Pixeled.ttf", 14);
 
@@ -145,34 +148,6 @@ void Resources::load(SDLState& state) {
 	// Verify map properties
 	SDL_Log("Map loaded: %d x %d, tile size: %d x %d",
 		map4->mapWidth, map4->mapHeight, map4->tileWidth, map4->tileHeight);
-
-	//for (tmx::TileSet& tileSet : map2->tileSets) {
-	//	TileSetTextures tst;
-	//	tst.firstGid = tileSet.firstgid;
-
-	//	if (tileSet.tiles.size() == 1 && tileSet.count > 1) {
-	//		// Only ONE image file, but it contains MULTIPLE tiles
-	//		// Single image tileset - load the main image once
-	//		const std::string imagePath = "data/tiles/" +
-	//			std::filesystem::path(tileSet.tiles[0].image.source).filename().string();
-	//		SDL_Texture* mainTexture = loadTexture(state.renderer, imagePath);
-
-	//		// Push the same texture for each tile in the set
-	//		for (int i = 0; i < tileSet.count; i++) {
-	//			tst.textures.push_back(mainTexture);
-	//		}
-	//	}
-	//	else {
-	//		// Individual tile images
-	//		tst.textures.reserve(tileSet.tiles.size());
-	//		for (tmx::Tile& tile : tileSet.tiles) {
-	//			const std::string imagePath = "data/tiles/" +
-	//				std::filesystem::path(tile.image.source).filename().string();
-	//			tst.textures.push_back(loadTexture(state.renderer, imagePath));
-	//		}
-	//	}
-	//	tilesetTextures.push_back(std::move(tst));
-	//}
 }
 
 void Resources::unload() {
@@ -188,5 +163,10 @@ void Resources::unload() {
 	if (font) {
 		TTF_CloseFont(font);
 		font = nullptr;
+	}
+	if (gMixer) {
+		MIX_DestroyMixer(gMixer);
+		gMixer = nullptr;
+		MIX_Quit();
 	}
 }

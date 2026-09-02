@@ -241,6 +241,8 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 			float bounceStrength = 1.0f; 
 			objA.velocity = collisionNormal * glm::length(objA.velocity) * bounceStrength;
 			objA.shouldFlash = true;
+
+			MIX_PlayAudio(res.gMixer, res.audioHit);
 			break;
 		}
 		case ObjectType::coin: {
@@ -248,6 +250,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 			// despawn the coin
 			objB.invisible = true;
 			objB.collider = { 0, 0, 0, 0 };
+			MIX_PlayAudio(res.gMixer, res.audioButt);
 			break;
 		}
 		case ObjectType::juice: {
@@ -261,6 +264,7 @@ void collisionResponse(const SDLState& state, GameState& gs, Resources& res, con
 			objB.collider = { 0, 0, 0, 0 };
 			SDL_Event event{ UserEvents::STAMINA_RESTORED };
 			SDL_PushEvent(&event);
+			MIX_PlayAudio(res.gMixer, res.audioMana);
 			break;
 		}
 		case ObjectType::win: {
@@ -476,7 +480,7 @@ void drawParalaxBackground(GameState* gs, SDL_Renderer* renderer, SDL_Texture* t
 	SDL_FRect dst{
 		.x = scrollPos,
 		.y = yPos,
-		.w = texture->w * 2.0f, //we get two copies in succesion
+		.w = texture->w * 3.0f, //we get two copies in succesion
 		.h = static_cast<float>(texture->h)
 	};
 

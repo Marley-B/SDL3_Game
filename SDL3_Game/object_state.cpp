@@ -36,6 +36,7 @@ void PlayerIdle::handleEvent(SDL_Event& e, Resources& res, GameObject& obj, Game
 
         // change of state triggers
         if (obj.directionH != 0 || obj.directionV != 0) { // if the player started moving
+            //obj.velocity = glm::vec2(0, 0);
             changeState(PlayerFly::get(), gs.currentStatePlayer, res, obj);
         }
         if (e.type == UserEvents::STAMINA_DEPLETED) {

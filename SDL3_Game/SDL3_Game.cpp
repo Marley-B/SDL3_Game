@@ -19,23 +19,19 @@ int main(int argc, char *agrc[])
 	state.height = 900;
 	state.logW = 640;
 	state.logH = 360;
-	
-	if (!initialize(state)) {
-		return 1;
-	}
 
 	// load game assets
 	Resources res;
-	res.load(state);
+	
+	if (!initialize(state, res)) {
+		return 1;
+	}
 
 	// setup game data
+	res.load(state);
 	GameState gs(state);
 	uint64_t prevTime = SDL_GetTicks();
 
-	// MIX_SetTrackGain(res.musicMain, 0.5f);
-	// MIX_PlayTrack(res.musicMain, -1);
-
-	//Button button = Button(res);
 	initializeLevels(res);
 	gs.currentStateGame->enter(state, gs, res);
 
@@ -43,6 +39,13 @@ int main(int argc, char *agrc[])
 
 	int prevWidth = state.width;
 	int prevHeight = state.height;
+
+	//Play the music
+	SDL_PropertiesID props = SDL_CreateProperties();
+	SDL_SetNumberProperty(props, MIX_PROP_PLAY_LOOPS_NUMBER, -1);
+	MIX_SetTrackGain(res.musicTrack, 0.7);
+	MIX_PlayTrack(res.musicTrack, props);
+	SDL_DestroyProperties(props);
 
 	// start the game loop
 	bool running = true;
@@ -116,7 +119,7 @@ void initializeLevels(Resources& res) {
 	}
 }
 
-bool initialize(SDLState& state) {
+bool initialize(SDLState& state, Resources& res) {
 
 	bool initSucces = true;
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
@@ -125,7 +128,7 @@ bool initialize(SDLState& state) {
 	}
 
 	// create window
-	state.window = SDL_CreateWindow("Undertale", state.width, state.height, SDL_WINDOW_RESIZABLE);
+	state.window = SDL_CreateWindow("Butterfly Scout", state.width, state.height, SDL_WINDOW_RESIZABLE);
 	if (!state.window) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating window", nullptr);
 		cleanup(state);
@@ -151,8 +154,8 @@ bool initialize(SDLState& state) {
 	}
 
 	// initialize the SDL_mixer audio pointer
-	state.mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-	if (!state.mixer) {
+	res.gMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+	if (!res.gMixer) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", "Error creating audio device", state.window);
 		cleanup(state);
 		initSucces = false;
@@ -168,9 +171,6 @@ bool initialize(SDLState& state) {
 }
 
 void cleanup(SDLState& state) {
-	if (state.mixer) {
-		MIX_DestroyMixer(state.mixer);
-	}
 	SDL_DestroyRenderer(state.renderer);
 	SDL_DestroyWindow(state.window);
 	SDL_Quit();

@@ -31,10 +31,12 @@ struct Resources {
         * texGameOverScreen, * texIntroScreen, * texLevelMenuScreen, * texWinScreen, *texStGreen, * texStYellow, * texStRed,
         * texStBox, * texStBg;
 
+    MIX_Mixer* gMixer;
     std::vector<MIX_Audio*> audioEffects;
-    MIX_Audio* audioShoot, * audioShootHit, * audioEnemyHit;
+    MIX_Audio* audioButt, * audioWin, * audioLose, * audioHit, * audioMana, * audioMusic;
     std::vector<MIX_Track*> tracks;
-    MIX_Track* musicMain;
+    MIX_Track* audioTrack;
+    MIX_Track* musicTrack;
 
     std::vector<TileSetTextures> tilesetTextures;
     std::vector<std::unique_ptr<tmx::Map>> maps;
@@ -48,7 +50,7 @@ struct Resources {
     // Method declarations
     SDL_Texture* loadTexture(SDL_Renderer* renderer, const std::string& filepath);
     MIX_Audio* loadAudio(MIX_Mixer* mixer, const std::string& filepath);
-    MIX_Track* loadTrack(MIX_Mixer* mixer, const std::string& filepath);
+    //MIX_Track* loadTrack(MIX_Mixer* mixer, const std::string& filepath);
     void load(SDLState& state);
     void unload();
 };

@@ -90,13 +90,14 @@ bool DeathState::enter(SDLState& state, GameState& gs, Resources& res) {
     mBgTexture = res.texGameOverScreen;
     mButtons.clear();
     auto button1 = std::make_unique<Button>(res);
-    button1->setPosition(40, 130);
+    button1->setPosition(40, 150);
     button1->setText(state, "Retry", color);
     mButtons.push_back(std::move(button1));
     auto button2 = std::make_unique<Button>(res);
-    button2->setPosition(40, 200);
+    button2->setPosition(40, 220);
     button2->setText(state, "Menu", color);
     mButtons.push_back(std::move(button2));
+    MIX_PlayAudio(res.gMixer, res.audioLose);
     return true;
 }
 
@@ -132,6 +133,7 @@ bool WinState::enter(SDLState& state, GameState& gs, Resources& res) {
     button->setPosition(450, 250);
     button->setText(state, "Menu", color);
     mButtons.push_back(std::move(button));
+    MIX_PlayAudio(res.gMixer, res.audioWin);
     return true;
 }
 

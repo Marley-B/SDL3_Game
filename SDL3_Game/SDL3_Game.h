@@ -21,6 +21,6 @@
 #include "level_state.h"
 #include "ui.h"
 
-bool initialize(SDLState& state);
+bool initialize(SDLState& state, Resources& res);
 void cleanup(SDLState& state);
 void initializeLevels(Resources& res);

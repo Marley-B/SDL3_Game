@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\SDL3_Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\README.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:README.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\object_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\level_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_status.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\SDL3_Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_status.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -19,51 +35,35 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\resources.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\level_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\object_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\SDL3_Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_status.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\level_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\include\\vector||{3B902123-F8A7-4915-9F01-361F908088D0}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\ui.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\ui.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\animation.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\animation.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\object_state.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\level_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_object.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\game_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\object_state.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\include\\vector||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\ui.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SDL3_Game\\ui.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -72,18 +72,18 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 258,
-          "SelectedChildIndex": 8,
+          "DockedHeight": 223,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "SDL3_Game.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\SDL3_Game.cpp",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.cpp",
               "RelativeToolTip": "SDL3_Game\\SDL3_Game.cpp",
-              "ViewState": "AgIAABcAAAAAAAAAAAAAwG8AAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAwC0AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-16T16:23:30.112Z",
               "IsPinned": true,
@@ -91,20 +91,48 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "SDL3_Game.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.h",
               "RelativeDocumentMoniker": "SDL3_Game\\SDL3_Game.h",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\SDL3_Game.h",
               "RelativeToolTip": "SDL3_Game\\SDL3_Game.h",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAIwBQAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAkwBcAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-08-19T18:37:22.657Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
+              "Title": "resources.h",
+              "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.h",
+              "RelativeDocumentMoniker": "SDL3_Game\\resources.h",
+              "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.h",
+              "RelativeToolTip": "SDL3_Game\\resources.h",
+              "ViewState": "AgIAACgAAAAAAAAAAADwvzkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-08-18T13:39:59.834Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "README.txt",
+              "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\README.txt",
+              "RelativeDocumentMoniker": "README.txt",
+              "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\README.txt",
+              "RelativeToolTip": "README.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-09-02T16:41:22.543Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "vector",
               "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\include\\vector",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Tools\\MSVC\\14.51.36231\\include\\vector",
@@ -116,19 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "animation.h",
-              "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\animation.h",
-              "RelativeDocumentMoniker": "SDL3_Game\\animation.h",
-              "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\animation.h",
-              "RelativeToolTip": "SDL3_Game\\animation.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-31T18:02:42.526Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "ui.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\ui.h",
               "RelativeDocumentMoniker": "SDL3_Game\\ui.h",
@@ -140,20 +156,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "level_state.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\level_state.cpp",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.cpp",
               "RelativeToolTip": "SDL3_Game\\level_state.cpp",
-              "ViewState": "AgIAAGsAAAAAAAAAAAAjwG4AAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAIIBAAAAAAAAAAAUwI4BAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-21T17:25:03.139Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "level_state.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\level_state.h",
               "RelativeDocumentMoniker": "SDL3_Game\\level_state.h",
@@ -161,36 +177,38 @@
               "RelativeToolTip": "SDL3_Game\\level_state.h",
               "ViewState": "AgIAABMAAAAAAAAAAAAUwBoAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-19T14:27:54.857Z"
+              "WhenOpened": "2026-08-19T14:27:54.857Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "game_status.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.h",
               "RelativeDocumentMoniker": "SDL3_Game\\game_status.h",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.h",
               "RelativeToolTip": "SDL3_Game\\game_status.h",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAUwFgAAAByAAAAAAAAAA==",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAkwFgAAAByAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-14T16:48:43.275Z"
+              "WhenOpened": "2026-08-14T16:48:43.275Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "game_status.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\game_status.cpp",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_status.cpp",
               "RelativeToolTip": "SDL3_Game\\game_status.cpp",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAYwGAAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAYwGAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-18T13:14:59.92Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 13,
               "Title": "object_state.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.h",
               "RelativeDocumentMoniker": "SDL3_Game\\object_state.h",
@@ -198,44 +216,33 @@
               "RelativeToolTip": "SDL3_Game\\object_state.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-14T17:15:26.344Z"
+              "WhenOpened": "2026-08-14T17:15:26.344Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 2,
               "Title": "object_state.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\object_state.cpp",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\object_state.cpp",
               "RelativeToolTip": "SDL3_Game\\object_state.cpp",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBoAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwCYAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-08-15T09:29:58.904Z"
+              "WhenOpened": "2026-08-15T09:29:58.904Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "resources.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\resources.cpp",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.cpp",
               "RelativeToolTip": "SDL3_Game\\resources.cpp",
-              "ViewState": "AgIAAHQAAAAAAAAAAAAkwIwAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAADcAAAAAAAAAAADwv0IAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-08-18T13:39:57.898Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "resources.h",
-              "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.h",
-              "RelativeDocumentMoniker": "SDL3_Game\\resources.h",
-              "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\resources.h",
-              "RelativeToolTip": "SDL3_Game\\resources.h",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAwCsAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-18T13:39:59.834Z",
               "EditorCaption": ""
             },
             {
@@ -248,23 +255,25 @@
               "RelativeToolTip": "SDL3_Game\\game_object.h",
               "ViewState": "AgIAAE8AAAAAAAAAAAAkwF8AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-18T14:17:29.242Z"
+              "WhenOpened": "2026-08-18T14:17:29.242Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "game_state.h",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.h",
               "RelativeDocumentMoniker": "SDL3_Game\\game_state.h",
               "ToolTip": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.h",
               "RelativeToolTip": "SDL3_Game\\game_state.h",
-              "ViewState": "AgIAAAMAAAAAAAAAAAA1wA4AAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAQwA4AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-08-15T10:06:42.199Z"
+              "WhenOpened": "2026-08-15T10:06:42.199Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 9,
               "Title": "game_state.cpp",
               "DocumentMoniker": "C:\\01_Filehub\\00_MeE\\03_Games\\SDL3_Game\\SDL3_Game\\game_state.cpp",
               "RelativeDocumentMoniker": "SDL3_Game\\game_state.cpp",
@@ -272,12 +281,13 @@
               "RelativeToolTip": "SDL3_Game\\game_state.cpp",
               "ViewState": "AgIAAAEAAAAAAAAAAAAcwA0AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2026-08-21T07:58:02.247Z"
+              "WhenOpened": "2026-08-21T07:58:02.247Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedHeight": 52,
+          "DockedHeight": 87,
           "SelectedChildIndex": -1,
           "Children": [
             {
