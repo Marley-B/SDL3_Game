@@ -475,7 +475,7 @@ void drawParalaxBackground(GameState* gs, SDL_Renderer* renderer, SDL_Texture* t
 	if (scrollPos <= -texture->w) {
 		scrollPos = 0;
 	}
-	float yPos = -gs->mapViewport.y + 191;
+	float yPos = -gs->mapViewport.y + 187;
 
 	SDL_FRect dst{
 		.x = scrollPos,
