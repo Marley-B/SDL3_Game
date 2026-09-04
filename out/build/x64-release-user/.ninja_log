@@ -1,0 +1,12 @@
+# ninja log v7
+77	1526	8102218819670109	SDL3_Game/CMakeFiles/SDL3_Game.dir/ext/tinyxml2/tinyxml2.cpp.obj	9ce5b8d9ecca611
+113	3353	8102218820082334	SDL3_Game/CMakeFiles/SDL3_Game.dir/object_state.cpp.obj	16e5934fe0750f96
+33	3441	8102218819275523	SDL3_Game/CMakeFiles/SDL3_Game.dir/tmx.cpp.obj	9a79984d4e215c6a
+8	3597	8102218819036932	SDL3_Game/CMakeFiles/SDL3_Game.dir/SDL3_Game.cpp.obj	6d34cd2ee2a80491
+192	3628	8102218820869985	SDL3_Game/CMakeFiles/SDL3_Game.dir/game_status.cpp.obj	9d9b0548da105c70
+321	3660	8102218822028768	SDL3_Game/CMakeFiles/SDL3_Game.dir/game_state.cpp.obj	975dd07281adba44
+227	3706	8102218821406029	SDL3_Game/CMakeFiles/SDL3_Game.dir/resources.cpp.obj	dcaad3c837deef7d
+295	3870	8102218821911842	SDL3_Game/CMakeFiles/SDL3_Game.dir/level_state.cpp.obj	c0bff178f4b65ea6
+392	3933	8102218822924270	SDL3_Game/CMakeFiles/SDL3_Game.dir/ui.cpp.obj	e475a8fc7d37374e
+3933	4734	8102218858265800	SDL3_Game/SDL3_Game.exe	1df23121b3f7abc9
+12	624	8102228874007676	SDL3_Game/SDL3_Game.exe	87e37e665ee907ca

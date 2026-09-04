@@ -1,0 +1,65 @@
+{
+	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "C:/SDK/SDL3_ttf-3.2.2/cmake/../lib/x64/SDL3_ttf.dll"
+		},
+		{
+			"path" : "C:/SDK/SDL3_ttf-3.2.2/cmake/../lib/x64/SDL3_ttf.lib"
+		}
+	],
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"find_package"
+		],
+		"files" : 
+		[
+			"C:/SDK/SDL3_ttf-3.2.2/cmake/SDL3_ttfConfig.cmake",
+			"SDL3_Game/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 40,
+				"parent" : 2
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"id" : "SDL3_ttf::SDL3_ttf-shared::@0173c57984cd429b2ac7",
+	"imported" : true,
+	"local" : true,
+	"name" : "SDL3_ttf::SDL3_ttf-shared",
+	"nameOnDisk" : "SDL3_ttf.dll",
+	"paths" : 
+	{
+		"build" : "SDL3_Game",
+		"source" : "SDL3_Game"
+	},
+	"sources" : [],
+	"type" : "SHARED_LIBRARY"
+}

@@ -1,0 +1,157 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3::Headers::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3__Headers-Release-4201b18768d16a74d791.json",
+					"name" : "SDL3::Headers",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3::SDL3-shared::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3__SDL3-shared-Release-da1646b43f31857024f1.json",
+					"name" : "SDL3::SDL3-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3::SDL3_test::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3__SDL3_test-Release-ed6272257144f651d50e.json",
+					"name" : "SDL3::SDL3_test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3_image::SDL3_image-shared::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3_image__SDL3_image-shared-Release-8ce3e57910e99e1f6e7f.json",
+					"name" : "SDL3_image::SDL3_image-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3_mixer::SDL3_mixer-shared::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3_mixer__SDL3_mixer-shared-Release-2fb1ae508ab1025c555b.json",
+					"name" : "SDL3_mixer::SDL3_mixer-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3_ttf::SDL3_ttf-shared::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3_ttf__SDL3_ttf-shared-Release-5b41be7cfbfc97ad0de2.json",
+					"name" : "SDL3_ttf::SDL3_ttf-shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "glm::glm::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-glm__glm-Release-253964399afa46403a8e.json",
+					"name" : "glm::glm",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "glm::glm-header-only::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-glm__glm-header-only-Release-668cf088158e82d6acf6.json",
+					"name" : "glm::glm-header-only",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Release-f040eec181a89de70dbe.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"build" : "SDL3_Game",
+					"jsonFile" : "directory-SDL3_Game-Release-18597066ae469b3afbf7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "SDL3_Game",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "SDL3_Game",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "SDL3_Game::@0173c57984cd429b2ac7",
+					"jsonFile" : "target-SDL3_Game-Release-8cb920a661b2005db078.json",
+					"name" : "SDL3_Game",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/01_Filehub/00_MeE/03_Games/SDL3_Game/out/build/x64-release-user",
+		"source" : "C:/01_Filehub/00_MeE/03_Games/SDL3_Game"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	}
+}

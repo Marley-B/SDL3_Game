@@ -10,7 +10,9 @@
       "out\\build\\x86-release",
       "out\\install\\x86-release",
       "out\\build\\x64-debug-user",
-      "out\\install\\x64-debug-user"
+      "out\\install\\x64-debug-user",
+      "out\\build\\x64-release-user",
+      "out\\install\\x64-release-user"
     ]
   },
   "ExpandedNodes": [
@@ -22,5 +24,6 @@
     "\\data\\ui",
     "\\SDL3_Game"
   ],
+  "SelectedNode": "\\SDL3_Game\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }

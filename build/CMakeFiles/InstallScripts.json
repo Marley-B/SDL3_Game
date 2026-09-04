@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/01_Filehub/00_MeE/03_Games/SDL3_Game/build/cmake_install.cmake",
-		"C:/01_Filehub/00_MeE/03_Games/SDL3_Game/build/SDL3_Game/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

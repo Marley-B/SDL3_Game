@@ -6,9 +6,15 @@ find_package(SDL3_image REQUIRED)
 find_package(glm REQUIRED)
 find_package(SDL3_mixer REQUIRED)
 find_package(SDL3_ttf REQUIRED)
+
 # Add source to this project's executable.
-add_executable (SDL3_Game "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" 
-    "object_state.cpp" "game_status.cpp" "game_status.h" "resources.cpp" "level_state.cpp" "game_state.cpp" "ui.cpp")
+if(CMAKE_BUILD_TYPE STREQUAL "Release" OR NOT CMAKE_BUILD_TYPE)
+  add_executable(SDL3_Game WIN32 "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" 
+      "object_state.cpp" "game_status.cpp" "game_status.h" "resources.cpp" "level_state.cpp" "game_state.cpp" "ui.cpp")
+else()
+  add_executable(SDL3_Game "SDL3_Game.cpp" "SDL3_Game.h" "timer.h" "tmx.cpp" "tmx.h" "animation.h" "ext/tinyxml2/tinyxml2.cpp" 
+      "object_state.cpp" "game_status.cpp" "game_status.h" "resources.cpp" "level_state.cpp" "game_state.cpp" "ui.cpp")
+endif()
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET SDL3_Game PROPERTY CXX_STANDARD 20)
