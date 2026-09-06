@@ -1,7 +1,7 @@
+This is a repository for a small platformer game called "Butterfly Scout" made in C++ with SDL3
+To play it download the zip file found in "Releases", windows only
 
-Hi! This is my first time trying to program a game without an engine
-
-Most code is either done by me or adapted from one of this tutorials. Ai was used to solve bugs
+The Code is either done by me or adapted from one of this tutorials. Ai was used to solve bugs
 
 Tutorials that greatly helped:
 ----------------------------------------
